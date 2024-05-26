@@ -20,19 +20,6 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_SWIZZLE
 
-#include "constants.h"
-#include "lodepng.h"
-#include "myCube.h"
-#include "myTeapot.h"
-#include "shaderprogram.h"
-#include <GL/glew.h>
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
-#include <stdio.h>
-#include <stdlib.h>
-
 #include <algorithm>
 #include <chrono>
 #include <deque>
@@ -41,10 +28,25 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include <sstream>
 #include <thread>
 #include <vector>
-// #include "objloader.h"
-// #include "libs.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <lodepng.h>
+
+#include "constants.h"
+
+#include "shaderprogram.h"
+#include "shaders.h"
+
+#include "myCube.h"
 #include "mySnake.h"
+#include "myTeapot.h"
 #include "myapple.h"
 #include "mycylinder.h"
 
@@ -231,6 +233,7 @@ void initOpenGLProgram(GLFWwindow *window) {
 	sp	 = new ShaderProgram("shaders/v_simplest.glsl", NULL, "shaders/f_simplest.glsl");
 	tex0 = readTexture("models/planks.png");
 	tex1 = readTexture("models/planksNormal.png");
+	initShaders();
 }
 
 // Zwolnienie zasobów zajętych przez program
@@ -238,6 +241,7 @@ void freeOpenGLProgram(GLFWwindow *window) {
 	//************Tutaj umieszczaj kod, który należy wykonać po zakończeniu pętli głównej************
 
 	delete sp;
+	freeShaders();
 }
 
 // Procedura rysująca zawartość sceny
@@ -313,7 +317,7 @@ int main(void) {
 	}
 
 	window =
-		glfwCreateWindow(1500, 1500, "OpenGL", NULL, NULL); // Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
+		glfwCreateWindow(720, 720, "OpenGL", NULL, NULL); // Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
 
 	if (!window) // Jeżeli okna nie udało się utworzyć, to zamknij program
 	{
