@@ -23,7 +23,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 
 #include "GameCamera.h"
 #include "GameInput.h"
-#include "SnakeGame.h"
+#include "GameSnake.h"
 #include "constants.h"
 #include "libs.h"
 #include "shaderprogram.h"
@@ -116,7 +116,7 @@ int main(void) {
 		fprintf(stderr, "Nie można zainicjować GLFW.\n");
 		exit(EXIT_FAILURE);
 	}
-	window = glfwCreateWindow(720, 720, "OpenGL", NULL, NULL);
+	window = glfwCreateWindow(1280, 720, "OpenGL", NULL, NULL);
 	if (!window) {
 		fprintf(stderr, "Nie można utworzyć okna.\n");
 		glfwTerminate();

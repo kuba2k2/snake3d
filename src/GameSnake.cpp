@@ -1,23 +1,23 @@
-#include "SnakeGame.h"
+#include "GameSnake.h"
 
 #include <GameCamera.h>
 #include <GameInput.h>
 #include <models/ModelSnakeBodySphere.h>
 #include <models/ModelSnakeHead.h>
 
-SnakeGame::SnakeGame() {
+GameSnake::GameSnake() {
 	this->updateFront();
 	this->modelBody = new ModelSnakeBodySphere();
 	this->modelHead = new ModelSnakeHead();
 }
 
-SnakeGame::~SnakeGame() {
+GameSnake::~GameSnake() {
 	delete this->modelBody;
 	delete this->modelHead;
 	delete this->modelTail;
 }
 
-void SnakeGame::updateFront() {
+void GameSnake::updateFront() {
 	glm::vec3 direction;
 	direction.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
 	direction.y = sin(glm::radians(this->pitch));
@@ -25,7 +25,7 @@ void SnakeGame::updateFront() {
 	this->front = glm::normalize(direction);
 }
 
-void SnakeGame::tick(GLFWwindow *window, float deltaTime) {
+void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 	if (!freeCam)
 		this->yaw += input.yaw;
 	if (input.yaw == 0.0f) {
@@ -76,7 +76,7 @@ void SnakeGame::tick(GLFWwindow *window, float deltaTime) {
 	}
 }
 
-void SnakeGame::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
+void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 
 	char msg[64];
 	sprintf(msg, "speed=%f   curLength=%f", this->speed - this->slowdown, this->curLength);
@@ -103,4 +103,4 @@ void SnakeGame::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	glm::mat4 MT = glm::translate(M, this->path.back());
 }
 
-SnakeGame snake;
+GameSnake snake;

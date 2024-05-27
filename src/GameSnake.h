@@ -4,10 +4,10 @@
 
 #include <models/ModelBase.h>
 
-class SnakeGame {
+class GameSnake {
   public:
-	SnakeGame();
-	~SnakeGame();
+	GameSnake();
+	~GameSnake();
 
   private:
 	void updateFront();
@@ -40,4 +40,4 @@ class SnakeGame {
 	int slowdownCount{0};
 };
 
-extern SnakeGame snake;
+extern GameSnake snake;
