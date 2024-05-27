@@ -5,11 +5,13 @@
 #include <GameInput.h>
 #include <models/ModelSnakeBodySphere.h>
 #include <models/ModelSnakeHead.h>
+#include <models/ModelSnakeTail.h>
 
 GameSnake::GameSnake() {
 	this->updateFront();
 	this->modelBody = new ModelSnakeBodySphere();
 	this->modelHead = new ModelSnakeHead();
+	this->modelTail = new ModelSnakeTail();
 }
 
 GameSnake::~GameSnake() {
@@ -63,6 +65,8 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 
 	if (this->path.empty()) {
 		this->path.emplace_front(0.0f, 0.0f, 0.0f);
+		this->frontPath.emplace_front(this->front);
+		this->yawPath.emplace_front(this->yaw);
 	}
 
 	if (this->path.size() == 15) {
@@ -73,12 +77,16 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 	glm::vec3 prevHead = this->path.front();
 	glm::vec3 nextHead = prevHead + this->front * curSpeed * deltaTime;
 	this->path.emplace_front(nextHead);
+	this->frontPath.emplace_front(this->front);
+	this->yawPath.emplace_front(this->yaw);
 
 	this->curLength += glm::length(prevHead - nextHead);
 
 	while (this->curLength > this->maxLength) {
 		glm::vec3 prevTail = this->path.back();
 		this->path.pop_back();
+		this->frontPath.pop_back();
+		this->yawPath.pop_back();
 		glm::vec3 nextTail = this->path.back();
 		this->curLength -= glm::length(prevTail - nextTail);
 	}
@@ -109,7 +117,15 @@ void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	MH			 = glm::rotate(MH, glm::radians(15.0f), glm::vec3(1.0f, 0.0f, 0.0f));
 	this->modelHead->draw(window, ShaderProgramType::SP_LAMBERT, P, V, MH);
 
-	glm::mat4 MT = glm::translate(M, this->path.back());
+	glm::vec3 tailFront = this->frontPath.back();
+	float tailYaw		= this->yawPath.back();
+	glm::mat4 MT		= glm::translate(M, this->path.back());
+	MT					= glm::scale(MT, glm::vec3(0.52f, 0.52f, 0.52f));
+	MT					= glm::translate(MT, -0.8f * tailFront);
+	MT					= glm::translate(MT, glm::vec3(0.0f, 0.12f, 0.0f));
+	MT					= glm::rotate(MT, glm::radians(-tailYaw), glm::vec3(0.0f, 1.0f, 0.0f));
+	MT					= glm::rotate(MT, glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
+	this->modelTail->draw(window, ShaderProgramType::SP_LAMBERT, P, V, MT);
 }
 
 GameSnake snake;

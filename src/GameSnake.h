@@ -31,6 +31,8 @@ class GameSnake {
 	ModelBase *modelBody;
 	ModelBase *modelHead;
 	ModelBase *modelTail;
+	std::list<glm::vec3> frontPath;
+	std::list<float> yawPath;
 
   private:
 	float updateElapsed{0.0f};
