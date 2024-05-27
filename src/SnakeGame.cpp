@@ -1,5 +1,6 @@
 #include "SnakeGame.h"
 
+#include <GameCamera.h>
 #include <GameInput.h>
 
 SnakeGame::SnakeGame() {
@@ -45,19 +46,31 @@ void SnakeGame::tick(GLFWwindow *window, float deltaTime) {
 
 	this->updateFront();
 
-	float curSpeed = this->speed - this->slowdown;
 	if (this->path.empty()) {
 		this->path.emplace_front(0.0f, 0.0f, 0.0f);
 	}
-	glm::vec3 prevHeadPos = this->path.front();
-	glm::vec3 nextHeadPos = prevHeadPos + this->front * curSpeed * deltaTime;
-	this->path.emplace_front(nextHeadPos);
-	while (this->path.size() > this->length) {
+
+	float curSpeed	   = this->speed - this->slowdown;
+	glm::vec3 prevHead = this->path.front();
+	glm::vec3 nextHead = prevHead + this->front * curSpeed * deltaTime;
+	this->path.emplace_front(nextHead);
+
+	this->curLength += glm::length(prevHead - nextHead);
+
+	while (this->curLength > this->maxLength) {
+		glm::vec3 prevTail = this->path.back();
 		this->path.pop_back();
+		glm::vec3 nextTail = this->path.back();
+		this->curLength -= glm::length(prevTail - nextTail);
 	}
 }
 
 void SnakeGame::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
+
+	char msg[64];
+	sprintf(msg, "speed=%f   curLength=%f", this->speed - this->slowdown, this->curLength);
+	camera.drawText(0.0f, 0.0f, msg, glm::vec3(0.0f, 1.0f, 1.0f));
+
 	this->model.scale = 0.5f;
 
 	for (auto pos : this->path) {

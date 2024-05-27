@@ -19,7 +19,7 @@ void GameCamera::setViewport(GLFWwindow *window, int width, int height) {
 }
 
 void GameCamera::update(GLFWwindow *window) {
-//	this->yaw += input.yaw;
+	//	this->yaw += input.yaw;
 	this->pitch += input.pitch;
 
 	if (this->pitch > 89.0f)
