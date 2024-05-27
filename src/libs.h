@@ -5,6 +5,8 @@
 #include <deque>
 #include <fstream>
 #include <iostream>
+#include <list>
+#include <queue>
 #include <sstream>
 #include <thread>
 #include <vector>

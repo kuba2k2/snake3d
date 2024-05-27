@@ -24,6 +24,6 @@ class ModelBase {
 	float *vertexNormals;
 	float *texCoords;
 
-  protected:
+  public:
 	float scale = 1.0f;
 };

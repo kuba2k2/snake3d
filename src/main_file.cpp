@@ -20,6 +20,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_SWIZZLE
 
+#include "SnakeGame.h"
 #include "camera.h"
 #include "constants.h"
 #include "libs.h"
@@ -32,6 +33,8 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "models/ModelFloor.h"
 #include "models/ModelSnake.h"
 #include "models/ModelTeapot.h"
+
+SnakeGame snake;
 
 // Procedura obsługi błędów
 void error_callback(int error, const char *description) {
@@ -81,6 +84,8 @@ void drawScene(GLFWwindow *window, float angle_x, float angle_y) {
 
 	glm::mat4 V = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
 	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, cameraAspectRatio, 0.01f, 50.0f);
+
+	snake.draw(window, P, V);
 
 	glm::mat4 M = glm::mat4(1.0f);
 	//	M			= glm::rotate(M, angle_y, glm::vec3(1.0f, 0.0f, 0.0f));
@@ -138,6 +143,7 @@ int main(void) {
 		lastTime		  = currentTime;
 
 		updateCamera(window, deltaTime);
+		snake.advance(window, deltaTime);
 		drawScene(window, 0.0f, 0.0f);
 
 		glfwPollEvents();

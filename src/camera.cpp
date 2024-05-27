@@ -1,7 +1,7 @@
 #include "camera.h"
 
-glm::vec3 cameraPos	  = glm::vec3(0.0f, 0.0f, 3.0f);
-glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+glm::vec3 cameraPos	  = glm::vec3(0.0f, 15.0f, 3.0f);
+glm::vec3 cameraFront = glm::vec3(0.0f, 0.0f, 0.0f);
 glm::vec3 cameraUp	  = glm::vec3(0.0f, 1.0f, 0.0f);
 
 float cameraSensitivity = 0.1f;
@@ -15,13 +15,19 @@ static float cameraMoveSides   = 0.0f;
 static bool firstMouse = true;
 
 float yaw	= -90.0f;
-float pitch = 0.0f;
+float pitch = -45.0f;
 
 void initCamera(GLFWwindow *window) {
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
 	windowCenterX = width / 2.0f;
 	windowCenterY = height / 2.0f;
+
+	glm::vec3 direction;
+	direction.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
+	direction.y = sin(glm::radians(pitch));
+	direction.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
+	cameraFront = glm::normalize(direction);
 }
 
 void cameraKeyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
