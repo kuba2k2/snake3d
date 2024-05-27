@@ -29,6 +29,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "libs.h"
 #include "shaderprogram.h"
 #include "shaders.h"
+#include "textures.h"
 
 #include "models/ModelApple.h"
 #include "models/ModelCube.h"
@@ -40,28 +41,6 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 // Procedura obsługi błędów
 void error_callback(int error, const char *description) {
 	fputs(description, stderr);
-}
-
-GLuint readTexture(const char *filename) {
-	GLuint tex;
-	glActiveTexture(GL_TEXTURE0);
-
-	// Wczytanie do pamięci komputera
-	std::vector<unsigned char> image; // Alokuj wektor do wczytania obrazka
-	unsigned width, height;			  // Zmienne do których wczytamy wymiary obrazka
-	// Wczytaj obrazek
-	unsigned error = lodepng::decode(image, width, height, filename);
-
-	// Import do pamięci karty graficznej
-	glGenTextures(1, &tex);			   // Zainicjuj jeden uchwyt
-	glBindTexture(GL_TEXTURE_2D, tex); // Uaktywnij uchwyt
-	// Wczytaj obrazek do pamięci KG skojarzonej z uchwytem
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, (unsigned char *)image.data());
-
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-	return tex;
 }
 
 void setViewport(GLFWwindow *window, int width, int height) {
@@ -82,6 +61,7 @@ void initOpenGLProgram(GLFWwindow *window) {
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	gltInit();
 	initShaders();
+	initTextures();
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
 	setViewport(window, width, height);
@@ -91,6 +71,7 @@ void initOpenGLProgram(GLFWwindow *window) {
 void freeOpenGLProgram(GLFWwindow *window) {
 	gltTerminate();
 	freeShaders();
+	freeTextures();
 }
 
 void drawScene(GLFWwindow *window) {
