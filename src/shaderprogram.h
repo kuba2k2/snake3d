@@ -20,8 +20,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #ifndef SHADERPROGRAM_H
 #define SHADERPROGRAM_H
 
-#include "stdio.h"
-#include <GL/glew.h>
+#include <libs.h>
 
 class ShaderProgram {
   private:
