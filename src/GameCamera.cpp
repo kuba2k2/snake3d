@@ -2,6 +2,8 @@
 
 #include <GameInput.h>
 
+bool freeCam = false;
+
 GameCamera::GameCamera() {
 	this->updateFront();
 }
@@ -19,7 +21,8 @@ void GameCamera::setViewport(GLFWwindow *window, int width, int height) {
 }
 
 void GameCamera::update(GLFWwindow *window) {
-	//	this->yaw += input.yaw;
+	if (freeCam)
+		this->yaw += input.yaw;
 	this->pitch += input.pitch;
 
 	if (this->pitch > 89.0f)
@@ -29,11 +32,15 @@ void GameCamera::update(GLFWwindow *window) {
 
 	this->updateFront();
 
-	this->pos += this->front * input.walk;
-	//	this->pos += glm::normalize(glm::cross(this->front, this->up)) * input.walk;
+	glm::vec3 direction;
+	direction.x = cos(glm::radians(this->yaw));
+	direction.y = 0.0f;
+	direction.z = sin(glm::radians(this->yaw));
+
+	this->pos += direction * input.walk;
 }
 
-void GameCamera::drawText(float x, float y, const std::string& text, glm::vec3 color) {
+void GameCamera::drawText(float x, float y, const std::string &text, glm::vec3 color) {
 	GLTtext *glt = gltCreateText();
 	gltSetText(glt, text.c_str());
 	gltBeginDraw();

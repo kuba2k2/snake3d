@@ -2,9 +2,19 @@
 
 #include <GameCamera.h>
 #include <GameInput.h>
+#include <models/ModelSnakeBodySphere.h>
+#include <models/ModelSnakeHead.h>
 
 SnakeGame::SnakeGame() {
 	this->updateFront();
+	this->modelBody = new ModelSnakeBodySphere();
+	this->modelHead = new ModelSnakeHead();
+}
+
+SnakeGame::~SnakeGame() {
+	delete this->modelBody;
+	delete this->modelHead;
+	delete this->modelTail;
 }
 
 void SnakeGame::updateFront() {
@@ -16,7 +26,8 @@ void SnakeGame::updateFront() {
 }
 
 void SnakeGame::tick(GLFWwindow *window, float deltaTime) {
-	this->yaw += input.yaw;
+	if (!freeCam)
+		this->yaw += input.yaw;
 	if (input.yaw == 0.0f) {
 		if (this->slowdownCount == 0) {
 			this->slowdown = 0.0f;
@@ -71,13 +82,25 @@ void SnakeGame::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	sprintf(msg, "speed=%f   curLength=%f", this->speed - this->slowdown, this->curLength);
 	camera.drawText(0.0f, 0.0f, msg, glm::vec3(0.0f, 1.0f, 1.0f));
 
-	this->model.scale = 0.5f;
+	if (this->path.size() < 3)
+		return;
 
+	glm::mat4 M = glm::mat4(1.0f);
 	for (auto pos : this->path) {
-		glm::mat4 M = glm::mat4(1.0f);
-		M			= glm::translate(M, pos);
-		this->model.draw(window, ShaderProgramType::SP_LAMBERT, P, V, M);
+		glm::mat4 MB = glm::translate(M, pos);
+		this->modelBody->draw(window, ShaderProgramType::SP_LAMBERT, P, V, MB);
 	}
+
+	glm::mat4 MH = glm::translate(M, this->path.front());
+	MH			 = glm::scale(MH, glm::vec3(0.9f, 0.9f, 0.9f));
+	MH			 = glm::translate(MH, 0.9f * this->front);
+	MH			 = glm::rotate(MH, glm::radians(-this->yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+	MH			 = glm::rotate(MH, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+	MH			 = glm::rotate(MH, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	MH			 = glm::rotate(MH, glm::radians(15.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+	this->modelHead->draw(window, ShaderProgramType::SP_LAMBERT, P, V, MH);
+
+	glm::mat4 MT = glm::translate(M, this->path.back());
 }
 
 SnakeGame snake;

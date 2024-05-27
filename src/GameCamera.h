@@ -25,4 +25,6 @@ class GameCamera {
 	float pitch{-75.0f};
 };
 
+extern bool freeCam;
+
 extern GameCamera camera;

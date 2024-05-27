@@ -2,11 +2,12 @@
 
 #include <libs.h>
 
-#include <models/ModelCube.h>
+#include <models/ModelBase.h>
 
 class SnakeGame {
   public:
 	SnakeGame();
+	~SnakeGame();
 
   private:
 	void updateFront();
@@ -19,15 +20,17 @@ class SnakeGame {
 	std::list<glm::vec3> path;
 	glm::vec3 front;
 	float speed{10.0f};			 // actual movement speed
-	float maxLength{4};			 // actual body length
-	float updateInterval{0.02f}; // body path resolution
+	float maxLength{4.0f};		 // actual body length
+	float updateInterval{0.02f}; // body path spacing
 	float slowdownMax{5.0f};	 // maximum turning slowdown
 
   private:
 	float curLength{0.0f};
 	float yaw{0.0f};
 	float pitch{0.0f};
-	ModelCube model;
+	ModelBase *modelBody;
+	ModelBase *modelHead;
+	ModelBase *modelTail;
 
   private:
 	float updateElapsed{0.0f};
