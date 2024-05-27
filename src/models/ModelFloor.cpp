@@ -72,4 +72,5 @@ ModelFloor::ModelFloor() {
 	this->normals		= myFloorNormals;
 	this->vertexNormals = myFloorVertexNormals;
 	this->texCoords		= myFloorTexCoords;
+	this->scale			= 0.5f;
 }

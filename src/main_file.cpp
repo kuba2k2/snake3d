@@ -21,6 +21,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #define GLM_FORCE_SWIZZLE
 #define GLT_IMPLEMENTATION
 
+#include "GameBoard.h"
 #include "GameCamera.h"
 #include "GameClass.h"
 #include "GameInput.h"
@@ -78,8 +79,9 @@ void drawScene(GLFWwindow *window) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glm::mat4 V = glm::lookAt(camera.pos, camera.pos + camera.front, camera.up);
-	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, camera.aspectRatio, 0.01f, 50.0f);
+	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, camera.aspectRatio, 0.01f, 100.0f);
 
+	board.draw(window, P, V);
 	snake.draw(window, P, V);
 
 	glm::mat4 M = glm::mat4(1.0f);
