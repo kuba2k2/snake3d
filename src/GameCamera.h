@@ -12,6 +12,7 @@ class GameCamera {
   public:
 	void setViewport(GLFWwindow *window, int width, int height);
 	void update(GLFWwindow *window);
+	void drawText(float x, float y, const std::string& text, glm::vec3 color);
 
   public:
 	glm::vec3 pos{0.0f, 15.0f, 3.0f};

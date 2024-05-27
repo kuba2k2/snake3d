@@ -33,4 +33,14 @@ void GameCamera::update(GLFWwindow *window) {
 	//	this->pos += glm::normalize(glm::cross(this->front, this->up)) * input.walk;
 }
 
+void GameCamera::drawText(float x, float y, const std::string& text, glm::vec3 color) {
+	GLTtext *glt = gltCreateText();
+	gltSetText(glt, text.c_str());
+	gltBeginDraw();
+	gltColor(color.r, color.g, color.b, 1.0f);
+	gltDrawText2D(glt, x, y, 1.0f);
+	gltEndDraw();
+	gltDeleteText(glt);
+}
+
 GameCamera camera;

@@ -16,6 +16,7 @@
 #include <stdlib.h>
 
 #define GLT_MANUAL_VIEWPORT
+#define GLT_IMPORTS
 
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
