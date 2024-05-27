@@ -5,6 +5,9 @@
 enum class ShaderProgramType {
 	SP_COLORED,
 	SP_LAMBERT,
+	SP_LAMBERT_TEXTURED,
+	SP_TBN,
+	SP_PHONG,
 };
 
 class ModelBase {
@@ -26,4 +29,7 @@ class ModelBase {
 
   public:
 	float scale = 1.0f;
+	GLuint tex;
+	GLuint texNormal;
+	glm::vec2 texRepeat{1.0f, 1.0f};
 };
