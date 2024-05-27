@@ -11,6 +11,7 @@ class GameInput {
 	float keyWalkSensitivity{5.0f};
 	float keyAngleSensitivity{120.0f};
 	float mouseSensitivity{0.1f};
+	float mouseMaxAngle{270.0f};
 	float yaw{0.0f};
 	float pitch{0.0f};
 	float walk{0.0f};

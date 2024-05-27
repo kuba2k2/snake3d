@@ -16,14 +16,41 @@ void SnakeGame::updateFront() {
 
 void SnakeGame::tick(GLFWwindow *window, float deltaTime) {
 	this->yaw += input.yaw;
+	if (input.yaw == 0.0f) {
+		if (this->slowdownCount == 0) {
+			this->slowdown = 0.0f;
+		} else {
+			float speedupStep = this->slowdown / (float)this->slowdownCount;
+			speedupStep *= this->slowdownSpeedupFactor;
+			if (this->slowdown - speedupStep >= 0.0f) {
+				this->slowdown -= speedupStep;
+			}
+			this->slowdownCount -= 1;
+		}
+	} else {
+		float slowdownStep = glm::abs(input.yaw) * this->slowdownFactor;
+		if (this->slowdown + slowdownStep < this->slowdownMax) {
+			this->slowdown += slowdownStep;
+			this->slowdownCount += 1;
+		}
+	}
+
+	this->updateElapsed += deltaTime;
+	if (this->updateElapsed > this->updateInterval) {
+		this->updateElapsed -= this->updateInterval;
+		deltaTime = this->updateInterval;
+	} else {
+		return;
+	}
 
 	this->updateFront();
 
+	float curSpeed = this->speed - this->slowdown;
 	if (this->path.empty()) {
 		this->path.emplace_front(0.0f, 0.0f, 0.0f);
 	}
 	glm::vec3 prevHeadPos = this->path.front();
-	glm::vec3 nextHeadPos = prevHeadPos + this->front * speed * deltaTime;
+	glm::vec3 nextHeadPos = prevHeadPos + this->front * curSpeed * deltaTime;
 	this->path.emplace_front(nextHeadPos);
 	while (this->path.size() > this->length) {
 		this->path.pop_back();
