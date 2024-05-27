@@ -19,9 +19,11 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 
 #define GLM_FORCE_RADIANS
 #define GLM_FORCE_SWIZZLE
+#define GLT_IMPLEMENTATION
 
+#include "GameCamera.h"
+#include "GameInput.h"
 #include "SnakeGame.h"
-#include "camera.h"
 #include "constants.h"
 #include "libs.h"
 #include "shaderprogram.h"
@@ -33,8 +35,6 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "models/ModelFloor.h"
 #include "models/ModelSnake.h"
 #include "models/ModelTeapot.h"
-
-SnakeGame snake;
 
 // Procedura obsługi błędów
 void error_callback(int error, const char *description) {
@@ -63,52 +63,45 @@ GLuint readTexture(const char *filename) {
 	return tex;
 }
 
+void setViewport(GLFWwindow *window, int width, int height) {
+	if (height == 0)
+		return;
+	glViewport(0, 0, width, height);
+	gltViewport(width, height);
+	camera.setViewport(window, width, height);
+	input.setViewport(window, width, height);
+}
+
 void initOpenGLProgram(GLFWwindow *window) {
 	glClearColor(0x21 / 255.0f, 0x96 / 255.0f, 0xf3 / 255.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
-	glfwSetWindowSizeCallback(window, cameraWindowCallback);
-	glfwSetKeyCallback(window, cameraKeyCallback);
+	glfwSetWindowSizeCallback(window, setViewport);
 	//	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-	glfwSetCursorPosCallback(window, cameraMouseCallback);
-	initCamera(window);
+	gltInit();
 	initShaders();
+	int width, height;
+	glfwGetWindowSize(window, &width, &height);
+	setViewport(window, width, height);
 	glfwSetTime(0);
 }
 
 void freeOpenGLProgram(GLFWwindow *window) {
+	gltTerminate();
 	freeShaders();
 }
 
-void drawScene(GLFWwindow *window, float angle_x, float angle_y) {
+void drawScene(GLFWwindow *window) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glm::mat4 V = glm::lookAt(cameraPos, cameraPos + cameraFront, cameraUp);
-	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, cameraAspectRatio, 0.01f, 50.0f);
+	glm::mat4 V = glm::lookAt(camera.pos, camera.pos + camera.front, camera.up);
+	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, camera.aspectRatio, 0.01f, 50.0f);
 
 	snake.draw(window, P, V);
 
 	glm::mat4 M = glm::mat4(1.0f);
-	//	M			= glm::rotate(M, angle_y, glm::vec3(1.0f, 0.0f, 0.0f));
-	//	M			= glm::rotate(M, angle_x, glm::vec3(0.0f, 1.0f, 0.0f));
 
 	ModelBase *model;
-
-//	model = new ModelTeapot();
-//	model->draw(window, ShaderProgramType::SP_LAMBERT, P, V, M);
-//	M = glm::mat4(1.0f);
-//	M = glm::translate(M, glm::vec3(1.0f, 0.0f, 0.0f));
-//	model->draw(window, ShaderProgramType::SP_COLORED, P, V, M);
-//	delete model;
-//
-//	model = new ModelCube();
-//	model->draw(window, ShaderProgramType::SP_LAMBERT, P, V, M);
-//	delete model;
-//
-//	model = new ModelFloor();
-//	model->draw(window, ShaderProgramType::SP_LAMBERT, P, V, M);
-//	delete model;
-
-	model = new ModelCylinder();
+	model = new ModelTeapot();
 	model->draw(window, ShaderProgramType::SP_LAMBERT, P, V, M);
 	delete model;
 
@@ -142,9 +135,10 @@ int main(void) {
 		float deltaTime	  = currentTime - lastTime;
 		lastTime		  = currentTime;
 
-		updateCamera(window, deltaTime);
-		snake.advance(window, deltaTime);
-		drawScene(window, 0.0f, 0.0f);
+		input.tick(window, deltaTime);
+		snake.tick(window, deltaTime);
+		camera.update(window);
+		drawScene(window);
 
 		glfwPollEvents();
 	}
