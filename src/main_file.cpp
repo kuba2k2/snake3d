@@ -22,6 +22,7 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #define GLT_IMPLEMENTATION
 
 #include "GameCamera.h"
+#include "GameClass.h"
 #include "GameInput.h"
 #include "GameSnake.h"
 #include "constants.h"
@@ -76,8 +77,9 @@ void initOpenGLProgram(GLFWwindow *window) {
 	//	glClearColor(0x21 / 255.0f, 0x96 / 255.0f, 0xf3 / 255.0f, 1.0f);
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
+	glfwSetKeyCallback(window, GameClass::keyCallback);
 	glfwSetWindowSizeCallback(window, setViewport);
-	//	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	gltInit();
 	initShaders();
 	int width, height;
@@ -137,7 +139,9 @@ int main(void) {
 		lastTime		  = currentTime;
 
 		input.tick(window, deltaTime);
-		snake.tick(window, deltaTime);
+		if (game.state != GameState::PAUSED) {
+			snake.tick(window, deltaTime);
+		}
 		camera.update(window);
 		drawScene(window);
 

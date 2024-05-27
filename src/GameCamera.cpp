@@ -2,18 +2,27 @@
 
 #include <GameInput.h>
 
-bool freeCam = false;
-
 GameCamera::GameCamera() {
 	this->updateFront();
 }
 
+void GameCamera::clampPitch() {
+	if (this->pitch > 89.0f)
+		this->pitch = 89.0f;
+	if (this->pitch < -89.0f)
+		this->pitch = -89.0f;
+}
+
 void GameCamera::updateFront() {
 	glm::vec3 direction;
-	direction.x = cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
-	direction.y = sin(glm::radians(this->pitch));
-	direction.z = sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
-	this->front = glm::normalize(direction);
+	direction.x		= cos(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
+	direction.y		= sin(glm::radians(this->pitch));
+	direction.z		= sin(glm::radians(this->yaw)) * cos(glm::radians(this->pitch));
+	this->front		= glm::normalize(direction);
+	direction.x		= cos(glm::radians(this->yaw));
+	direction.y		= 0.0f;
+	direction.z		= sin(glm::radians(this->yaw));
+	this->walkFront = glm::normalize(direction);
 }
 
 void GameCamera::setViewport(GLFWwindow *window, int width, int height) {
@@ -21,23 +30,18 @@ void GameCamera::setViewport(GLFWwindow *window, int width, int height) {
 }
 
 void GameCamera::update(GLFWwindow *window) {
-	if (freeCam)
-		this->yaw += input.yaw;
-	this->pitch += input.pitch;
-
-	if (this->pitch > 89.0f)
-		this->pitch = 89.0f;
-	if (this->pitch < -89.0f)
-		this->pitch = -89.0f;
-
-	this->updateFront();
-
-	glm::vec3 direction;
-	direction.x = cos(glm::radians(this->yaw));
-	direction.y = 0.0f;
-	direction.z = sin(glm::radians(this->yaw));
-
-	this->pos += direction * input.walk;
+	switch (this->mode) {
+		case CameraMode::FREE_CAM: {
+			this->yaw += input.yawMouse;
+			this->pitch += input.pitch;
+			this->clampPitch();
+			this->updateFront();
+			this->pos += this->walkFront * input.walkZ;
+			this->pos += glm::normalize(glm::cross(this->walkFront, this->up)) * input.walkX;
+			this->pos += glm::vec3(0.0f, input.walkY, 0.0f);
+			break;
+		}
+	}
 }
 
 void GameCamera::drawText(float x, float y, const std::string &text, glm::vec3 color) {
@@ -48,6 +52,14 @@ void GameCamera::drawText(float x, float y, const std::string &text, glm::vec3 c
 	gltDrawText2D(glt, x, y, 1.0f);
 	gltEndDraw();
 	gltDeleteText(glt);
+}
+
+CameraMode GameCamera::getMode() {
+	return this->mode;
+}
+
+void GameCamera::setMode(CameraMode newMode) {
+	this->mode = newMode;
 }
 
 GameCamera camera;

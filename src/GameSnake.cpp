@@ -26,9 +26,11 @@ void GameSnake::updateFront() {
 }
 
 void GameSnake::tick(GLFWwindow *window, float deltaTime) {
-	if (!freeCam)
-		this->yaw += input.yaw;
-	if (input.yaw == 0.0f) {
+	float yawDelta = input.yawKey;
+	if (camera.getMode() != CameraMode::FREE_CAM)
+		yawDelta += input.yawMouse;
+
+	if (yawDelta == 0.0f) {
 		if (this->slowdownCount == 0) {
 			this->slowdown = 0.0f;
 		} else {
@@ -40,12 +42,13 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 			this->slowdownCount -= 1;
 		}
 	} else {
-		float slowdownStep = glm::abs(input.yaw) * this->slowdownFactor;
+		float slowdownStep = glm::abs(yawDelta) * this->slowdownFactor;
 		if (this->slowdown + slowdownStep < this->slowdownMax) {
 			this->slowdown += slowdownStep;
 			this->slowdownCount += 1;
 		}
 	}
+	this->yaw += yawDelta;
 
 	this->updateElapsed += deltaTime;
 	if (this->updateElapsed > this->updateInterval) {
