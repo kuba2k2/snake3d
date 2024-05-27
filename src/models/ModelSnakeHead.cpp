@@ -1,15 +1,15 @@
 #include "ModelSnakeHead.h"
 
-#include <modeldata/mySnake.h>
+#include <modeldata/mysnake_head.h>
 
 ModelSnakeHead::ModelSnakeHead() {
-	this->vertexCount = mySnakeVertexCount;
-	this->vertices	  = mySnakeVertices;
-	//	this->colors		= mySnakeColors;
-	this->c1	  = mySnakeC1;
-	this->c2	  = mySnakeC2;
-	this->c3	  = mySnakeC3;
-	this->normals = mySnakeNormals;
-	//	this->vertexNormals = mySnakeVertexNormals;
-	this->texCoords = mySnakeTexCoords;
+	this->vertexCount = mysnake_headVertexCount;
+	this->vertices	  = mysnake_headVertices;
+	//	this->colors		= mysnake_headColors;
+	this->c1	  = mysnake_headC1;
+	this->c2	  = mysnake_headC2;
+	this->c3	  = mysnake_headC3;
+	this->normals = mysnake_headNormals;
+	//	this->vertexNormals = mysnake_headVertexNormals;
+	this->texCoords = mysnake_headTexCoords;
 }

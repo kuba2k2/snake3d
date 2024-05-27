@@ -1,6 +1,7 @@
 #include "GameSnake.h"
 
 #include <GameCamera.h>
+#include <GameClass.h>
 #include <GameInput.h>
 #include <models/ModelSnakeBodySphere.h>
 #include <models/ModelSnakeHead.h>
@@ -64,6 +65,10 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 		this->path.emplace_front(0.0f, 0.0f, 0.0f);
 	}
 
+	if (this->path.size() == 15) {
+		game.state = GameState::PAUSED;
+	}
+
 	float curSpeed	   = this->speed - this->slowdown;
 	glm::vec3 prevHead = this->path.front();
 	glm::vec3 nextHead = prevHead + this->front * curSpeed * deltaTime;
@@ -97,6 +102,7 @@ void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	glm::mat4 MH = glm::translate(M, this->path.front());
 	MH			 = glm::scale(MH, glm::vec3(0.9f, 0.9f, 0.9f));
 	MH			 = glm::translate(MH, 0.9f * this->front);
+	MH			 = glm::translate(MH, glm::vec3(0.0f, -0.3f, 0.0f));
 	MH			 = glm::rotate(MH, glm::radians(-this->yaw), glm::vec3(0.0f, 1.0f, 0.0f));
 	MH			 = glm::rotate(MH, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	MH			 = glm::rotate(MH, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
