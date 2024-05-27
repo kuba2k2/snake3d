@@ -44,11 +44,12 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #include "shaderprogram.h"
 #include "shaders.h"
 
-#include "myCube.h"
-#include "mySnake.h"
-#include "myTeapot.h"
-#include "myapple.h"
-#include "mycylinder.h"
+#include "models/ModelApple.h"
+#include "models/ModelCube.h"
+#include "models/ModelCylinder.h"
+#include "models/ModelFloor.h"
+#include "models/ModelSnake.h"
+#include "models/ModelTeapot.h"
 
 float speed_x	  = 0;
 float speed_y	  = 0;
@@ -222,25 +223,18 @@ GLuint readTexture(const char *filename) {
 	return tex;
 }
 
-// Procedura inicjująca
 void initOpenGLProgram(GLFWwindow *window) {
-	//************Tutaj umieszczaj kod, który należy wykonać raz, na początku programu************
 	glClearColor(0, 0, 0, 1);
 	glEnable(GL_DEPTH_TEST);
 	glfwSetWindowSizeCallback(window, windowResizeCallback);
 	glfwSetKeyCallback(window, keyCallback);
 
-	sp	 = new ShaderProgram("shaders/v_simplest.glsl", NULL, "shaders/f_simplest.glsl");
-	tex0 = readTexture("models/planks.png");
+	tex0 = readTexture("models/apple.png");
 	tex1 = readTexture("models/planksNormal.png");
 	initShaders();
 }
 
-// Zwolnienie zasobów zajętych przez program
 void freeOpenGLProgram(GLFWwindow *window) {
-	//************Tutaj umieszczaj kod, który należy wykonać po zakończeniu pętli głównej************
-
-	delete sp;
 	freeShaders();
 }
 
@@ -307,37 +301,33 @@ void drawScene(GLFWwindow *window, float angle_x, float angle_y) {
 
 int main(void) {
 
-	GLFWwindow *window; // Wskaźnik na obiekt reprezentujący okno
+	GLFWwindow *window;
 
-	glfwSetErrorCallback(error_callback); // Zarejestruj procedurę obsługi błędów
+	glfwSetErrorCallback(error_callback);
 
-	if (!glfwInit()) { // Zainicjuj bibliotekę GLFW
+	if (!glfwInit()) {
 		fprintf(stderr, "Nie można zainicjować GLFW.\n");
 		exit(EXIT_FAILURE);
 	}
 
-	window =
-		glfwCreateWindow(720, 720, "OpenGL", NULL, NULL); // Utwórz okno 500x500 o tytule "OpenGL" i kontekst OpenGL.
-
-	if (!window) // Jeżeli okna nie udało się utworzyć, to zamknij program
-	{
+	window = glfwCreateWindow(720, 720, "OpenGL", NULL, NULL);
+	if (!window) {
 		fprintf(stderr, "Nie można utworzyć okna.\n");
 		glfwTerminate();
 		exit(EXIT_FAILURE);
 	}
 
-	glfwMakeContextCurrent(window
-	); // Od tego momentu kontekst okna staje się aktywny i polecenia OpenGL będą dotyczyć właśnie jego.
-	glfwSwapInterval(1); // Czekaj na 1 powrót plamki przed pokazaniem ukrytego bufora
+	glfwMakeContextCurrent(window);
+	glfwSwapInterval(1);
 
 	if (glewInit() != GLEW_OK) { // Zainicjuj bibliotekę GLEW
 		fprintf(stderr, "Nie można zainicjować GLEW.\n");
 		exit(EXIT_FAILURE);
 	}
 
-	initOpenGLProgram(window); // Operacje inicjujące
+	initOpenGLProgram(window);
 
-	// Główna pętla
+	glClearColor(0x21 / 255.0f, 0x96 / 255.0f, 0xf3 / 255.0f, 1.0f);
 
 	float angle_x = 0;					   // Aktualny kąt obrotu obiektu
 	float angle_y = 0;					   // Aktualny kąt obrotu obiektu

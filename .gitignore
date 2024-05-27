@@ -682,7 +682,7 @@ FodyWeavers.xsd
 
 # End of https://www.toptal.com/developers/gitignore/api/visualstudio,visualstudiocode,intellij+all,clion+all,cmake,git,c++,c,windows
 
-!/models/*.obj
+!/textures/*.obj
 !/libs/*/lib/Win32/
 !/libs/*/lib/x64/
 !/libs/**/*.lib
