@@ -1,8 +1,8 @@
-#include "ModelCylinder.h"
+#include "ModelSnakeBodyCylinder.h"
 
 #include <modeldata/mycylinder.h>
 
-ModelCylinder::ModelCylinder() {
+ModelSnakeBodyCylinder::ModelSnakeBodyCylinder() {
 	this->vertexCount = mycylinderVertexCount;
 	this->vertices	  = mycylinderVertices;
 	//	this->colors		= mycylinderColors;

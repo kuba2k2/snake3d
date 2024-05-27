@@ -31,9 +31,9 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 
 #include "models/ModelApple.h"
 #include "models/ModelCube.h"
-#include "models/ModelCylinder.h"
 #include "models/ModelFloor.h"
-#include "models/ModelSnake.h"
+#include "models/ModelSnakeBodyCylinder.h"
+#include "models/ModelSnakeHead.h"
 #include "models/ModelTeapot.h"
 
 // Procedura obsługi błędów

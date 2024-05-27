@@ -1,8 +1,8 @@
-#include "ModelSnake.h"
+#include "ModelSnakeHead.h"
 
 #include <modeldata/mySnake.h>
 
-ModelSnake::ModelSnake() {
+ModelSnakeHead::ModelSnakeHead() {
 	this->vertexCount = mySnakeVertexCount;
 	this->vertices	  = mySnakeVertices;
 	//	this->colors		= mySnakeColors;
