@@ -10,6 +10,13 @@ extern GLuint planksNormal1;
 extern GLuint planksNormal2;
 extern GLuint planksNormal3;
 extern GLuint planksSpec;
+extern GLuint texSnakeHeadColor;
+extern GLuint texSnakeHead;
+extern GLuint texSnakeHeadNormal;
+extern GLuint texSnakeSkin;
+extern GLuint texSnakeSkinNormal;
+extern GLuint texSnake;
+extern GLuint texSnakeNormal;
 
 void initTextures();
 void freeTextures();

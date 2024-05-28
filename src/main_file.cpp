@@ -21,23 +21,12 @@ Place, Fifth Floor, Boston, MA  02110 - 1301  USA
 #define GLM_FORCE_SWIZZLE
 #define GLT_IMPLEMENTATION
 
-#include "GameBoard.h"
 #include "GameCamera.h"
 #include "GameClass.h"
 #include "GameInput.h"
-#include "GameSnake.h"
-#include "constants.h"
 #include "libs.h"
-#include "shaderprogram.h"
 #include "shaders.h"
 #include "textures.h"
-
-#include "models/ModelApple.h"
-#include "models/ModelCube.h"
-#include "models/ModelFloor.h"
-#include "models/ModelSnakeBodyCylinder.h"
-#include "models/ModelSnakeHead.h"
-#include "models/ModelTeapot.h"
 
 // Procedura obsługi błędów
 void error_callback(int error, const char *description) {
@@ -51,6 +40,7 @@ void setViewport(GLFWwindow *window, int width, int height) {
 	gltViewport(width, height);
 	camera.setViewport(window, width, height);
 	input.setViewport(window, width, height);
+	game.setViewport(window, width, height);
 }
 
 void initOpenGLProgram(GLFWwindow *window) {
@@ -73,25 +63,6 @@ void freeOpenGLProgram(GLFWwindow *window) {
 	gltTerminate();
 	freeShaders();
 	freeTextures();
-}
-
-void drawScene(GLFWwindow *window) {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	glm::mat4 V = glm::lookAt(camera.pos, camera.pos + camera.front, camera.up);
-	glm::mat4 P = glm::perspective(50.0f * PI / 180.0f, camera.aspectRatio, 0.01f, 100.0f);
-
-	board.draw(window, P, V);
-	snake.draw(window, P, V);
-
-	glm::mat4 M = glm::mat4(1.0f);
-
-	ModelBase *model;
-	model = new ModelTeapot();
-	model->draw(window, ShaderProgramType::SP_LAMBERT, P, V, M);
-	delete model;
-
-	glfwSwapBuffers(window);
 }
 
 int main(void) {
@@ -122,11 +93,9 @@ int main(void) {
 		lastTime		  = currentTime;
 
 		input.tick(window, deltaTime);
-		if (game.state != GameState::PAUSED) {
-			snake.tick(window, deltaTime);
-		}
+		game.tick(window, deltaTime);
 		camera.update(window);
-		drawScene(window);
+		game.draw(window);
 
 		glfwPollEvents();
 	}

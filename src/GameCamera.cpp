@@ -44,12 +44,16 @@ void GameCamera::update(GLFWwindow *window) {
 	}
 }
 
-void GameCamera::drawText(float x, float y, const std::string &text, glm::vec3 color) {
+void GameCamera::drawText(float x, float y, const std::string &text, glm::vec3 color, float size, bool center) {
 	GLTtext *glt = gltCreateText();
 	gltSetText(glt, text.c_str());
 	gltBeginDraw();
 	gltColor(color.r, color.g, color.b, 1.0f);
-	gltDrawText2D(glt, x, y, 1.0f);
+	if (center) {
+		gltDrawText2DAligned(glt, x, y, size, GLT_CENTER, GLT_CENTER);
+	} else {
+		gltDrawText2D(glt, x, y, size);
+	}
 	gltEndDraw();
 	gltDeleteText(glt);
 }
