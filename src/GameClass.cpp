@@ -107,10 +107,10 @@ void GameClass::setViewport(GLFWwindow *window, int width, int height) {
 }
 
 void GameClass::tick(GLFWwindow *window, float deltaTime) {
-	if (this->state == GameState::PAUSED)
-		return;
-	if (this->snake != nullptr)
+	if (this->snake != nullptr && this->state != GameState::PAUSED)
 		this->snake->tick(window, deltaTime);
+	if (this->apple != nullptr)
+		this->apple->tick(window, deltaTime);
 }
 
 void GameClass::draw(GLFWwindow *window) {
