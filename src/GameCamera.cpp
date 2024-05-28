@@ -36,6 +36,8 @@ void GameCamera::setViewport(GLFWwindow *window, int width, int height) {
 void GameCamera::reset() {
 	this->yaw	= -90.0f;
 	this->pitch = -75.0f;
+	if (this->mode == CameraMode::BIRDS_EYE)
+		this->pitch = -30.0f;
 }
 
 void GameCamera::update(GLFWwindow *window) {

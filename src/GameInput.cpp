@@ -9,11 +9,11 @@ void GameInput::setViewport(GLFWwindow *window, int width, int height) {
 }
 
 void GameInput::scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
-	camera.birdsEyeDistance -= yoffset;
+	camera.birdsEyeDistance -= yoffset * 1.5f;
 	if (camera.birdsEyeDistance > 30.0f)
 		camera.birdsEyeDistance = 30.0f;
-	if (camera.birdsEyeDistance < 8.0f)
-		camera.birdsEyeDistance = 8.0f;
+	if (camera.birdsEyeDistance < 6.0f)
+		camera.birdsEyeDistance = 6.0f;
 }
 
 void GameInput::tick(GLFWwindow *window, float deltaTime) {

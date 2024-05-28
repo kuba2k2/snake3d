@@ -32,7 +32,7 @@ class GameCamera {
 	float yaw{-90.0f};
 	float pitch{-75.0f};
 	float aspectRatio{1.0f};
-	float birdsEyeDistance{20.0f};
+	float birdsEyeDistance{10.0f};
 	glm::vec3 staticPos{0.0f, 30.0f, 0.0f};
 
   private:
