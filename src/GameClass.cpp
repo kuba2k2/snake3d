@@ -22,6 +22,8 @@ void GameClass::newGame() {
 	this->state = GameState::PLAYING;
 	camera.setViewport(nullptr, this->windowWidth, this->windowHeight);
 	camera.reset();
+	if (camera.getMode() == CameraMode::FREE_CAM)
+		camera.setMode(CameraMode::BIRDS_EYE);
 }
 
 void GameClass::endGame(bool lost) {
@@ -131,6 +133,8 @@ void GameClass::draw(GLFWwindow *window) {
 		case GameState::PLAYING:
 			break;
 		case GameState::PAUSED:
+			if (camera.getMode() == CameraMode::FREE_CAM)
+				break;
 			camera.drawText(
 				this->windowWidth * 0.5f,
 				this->windowHeight * 0.5f,

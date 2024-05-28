@@ -97,14 +97,16 @@ void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	if (this->path.size() < 3)
 		return;
 
-	this->modelBody->tex = texSnake;
-	this->modelHead->tex = texSnakeHeadColor;
-	this->modelTail->tex = texSnakeSkin;
+	this->modelHead->tex	   = texSnakeHeadColor;
+	this->modelBody->tex	   = texSnakeHead;
+	this->modelBody->texNormal = texSnakeHeadNormal;
+	this->modelTail->tex	   = texSnakeHead;
+	this->modelTail->texNormal = texSnakeHeadNormal;
 
 	glm::mat4 M = glm::mat4(1.0f);
 	for (auto pos : this->path) {
 		glm::mat4 MB = glm::translate(M, pos);
-		this->modelBody->draw(window, ShaderProgramType::SP_LAMBERT_TEXTURED, P, V, MB);
+		this->modelBody->draw(window, ShaderProgramType::SP_TBN, P, V, MB);
 	}
 
 	glm::mat4 MH = glm::translate(M, this->path.front());
@@ -120,10 +122,10 @@ void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	glm::vec3 tailFront = this->frontPath.back();
 	float tailYaw		= this->yawPath.back();
 	glm::mat4 MT		= glm::translate(M, this->path.back());
-	MT					= glm::scale(MT, glm::vec3(0.52f, 0.52f, 0.52f));
-	MT					= glm::translate(MT, -0.8f * tailFront);
-	MT					= glm::translate(MT, glm::vec3(0.0f, 0.12f, 0.0f));
+	MT					= glm::scale(MT, glm::vec3(0.6, 0.6f, 0.6f));
+	MT					= glm::translate(MT, -0.3f * tailFront);
+	MT					= glm::translate(MT, glm::vec3(0.0f, -0.05f, 0.07f));
 	MT					= glm::rotate(MT, glm::radians(-tailYaw), glm::vec3(0.0f, 1.0f, 0.0f));
 	MT					= glm::rotate(MT, glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
-	this->modelTail->draw(window, ShaderProgramType::SP_LAMBERT_TEXTURED, P, V, MT);
+	this->modelTail->draw(window, ShaderProgramType::SP_TBN, P, V, MT);
 }
