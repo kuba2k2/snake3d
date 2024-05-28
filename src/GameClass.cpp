@@ -17,7 +17,7 @@ GameClass::~GameClass() {
 	delete this->cube;
 }
 
-void GameClass::newGame() {
+void GameClass::newGame(GLFWwindow *window) {
 	delete this->board;
 	delete this->snake;
 	delete this->apple;
@@ -30,9 +30,11 @@ void GameClass::newGame() {
 	camera.reset();
 	if (camera.getMode() == CameraMode::FREE_CAM)
 		camera.setMode(CameraMode::BIRDS_EYE);
+	this->mouseGrab = true;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
-void GameClass::endGame(bool lost) {
+void GameClass::endGame(GLFWwindow *window, bool lost) {
 	delete this->snake;
 	delete this->board;
 	delete this->apple;
@@ -43,6 +45,8 @@ void GameClass::endGame(bool lost) {
 		this->state = GameState::OVER;
 	else
 		this->state = GameState::MENU;
+	this->mouseGrab = false;
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 void GameClass::keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
@@ -51,9 +55,9 @@ void GameClass::keyCallback(GLFWwindow *window, int key, int scancode, int actio
 
 	switch (key) {
 		case GLFW_KEY_ENTER:
-			if (game.state == GameState::MENU) {
-				game.newGame();
-				game.mouseGrab = true;
+			if (game.state == GameState::MENU || game.state == GameState::OVER) {
+				game.newGame(window);
+				return;
 			} else if (game.state == GameState::PLAYING) {
 				game.state	   = GameState::PAUSED;
 				game.mouseGrab = false;
@@ -97,8 +101,8 @@ void GameClass::keyCallback(GLFWwindow *window, int key, int scancode, int actio
 		case GLFW_KEY_C:
 			if (key == GLFW_KEY_C && mods != GLFW_MOD_CONTROL)
 				break;
-			game.endGame();
-			break;
+			game.endGame(window);
+			return;
 
 		default:
 			break;
@@ -159,8 +163,8 @@ void GameClass::draw(GLFWwindow *window) {
 		glm::vec3 headPos  = this->snake->boxPos;
 		glm::vec3 headSize = this->snake->boxSize;
 		if (this->snake->hasCollision(headPos, headSize)) {
-			this->overReason = "Your snake bit itself!";
-			this->endGame(true);
+			this->overReason = "Your snake bit itself.";
+			this->endGame(window, true);
 		} else if (this->apple->hasCollision(headPos, headSize)) {
 			this->points += 1;
 			this->apple->reset(this->board);
@@ -173,8 +177,10 @@ void GameClass::draw(GLFWwindow *window) {
 			this->drawMenu(window);
 			break;
 		case GameState::PLAYING:
+			this->drawScore(window);
 			break;
 		case GameState::PAUSED:
+			this->drawScore(window);
 			if (camera.getMode() == CameraMode::FREE_CAM || this->debug)
 				break;
 			camera.drawText(
@@ -186,8 +192,43 @@ void GameClass::draw(GLFWwindow *window) {
 				true
 			);
 			break;
-		case GameState::OVER:
+		case GameState::OVER: {
+			camera.drawText(
+				this->windowWidth * 0.5f,
+				this->windowHeight * 0.3f,
+				"GAME OVER",
+				glm::vec3(0xFC, 0x41, 0x36),
+				6.0f,
+				true
+			);
+			char msg[128];
+			sprintf(msg, "You got %d points.", this->points);
+			camera.drawText(
+				this->windowWidth * 0.5f,
+				this->windowHeight * 0.5f,
+				this->overReason,
+				glm::vec3(0x95, 0x05, 0x02),
+				3.0f,
+				true
+			);
+			camera.drawText(
+				this->windowWidth * 0.5f,
+				this->windowHeight * 0.6f,
+				msg,
+				glm::vec3(0x95, 0x05, 0x02),
+				3.0f,
+				true
+			);
+			camera.drawText(
+				this->windowWidth * 0.5f,
+				this->windowHeight * 0.8f,
+				"Press Enter to continue.",
+				glm::vec3(0xFB, 0xBC, 0x05),
+				2.0f,
+				true
+			);
 			break;
+		}
 	}
 
 	glfwSwapBuffers(window);
@@ -225,6 +266,16 @@ void GameClass::drawMenu(GLFWwindow *window) {
 	);
 }
 
-bool GameClass::hasCollision(glm::vec3 pos1, glm::vec3 size1, glm::vec3 pos2, glm::vec3 size2) {}
+void GameClass::drawScore(GLFWwindow *window) {
+	char msg[128];
+	sprintf(msg, "Score: %d", this->points);
+	camera.drawText(this->windowWidth * 0.3f, this->windowHeight * 0.05f, msg, glm::vec3(0x23, 0xAA, 0xF2), 2.0f, true);
+	sprintf(msg, "Level: %d", this->level);
+	camera.drawText(this->windowWidth * 0.7f, this->windowHeight * 0.05f, msg, glm::vec3(0x23, 0xAA, 0xF2), 2.0f, true);
+}
+
+bool GameClass::hasCollision(glm::vec3 pos1, glm::vec3 size1, glm::vec3 pos2, glm::vec3 size2) {
+	return false;
+}
 
 GameClass game;
