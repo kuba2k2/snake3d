@@ -26,6 +26,8 @@ void GameClass::newGame(GLFWwindow *window) {
 	this->apple = new GameApple();
 	this->apple->reset(this->board);
 	this->state = GameState::PLAYING;
+	this->score = 0;
+	this->level = 1;
 	camera.setViewport(nullptr, this->windowWidth, this->windowHeight);
 	camera.reset();
 	if (camera.getMode() == CameraMode::FREE_CAM)
@@ -67,7 +69,7 @@ void GameClass::keyCallback(GLFWwindow *window, int key, int scancode, int actio
 			}
 			break;
 
-		case GLFW_KEY_F2:
+		case GLFW_KEY_F3:
 			game.debug = !game.debug;
 			break;
 
@@ -117,6 +119,9 @@ void GameClass::setViewport(GLFWwindow *window, int width, int height) {
 }
 
 void GameClass::tick(GLFWwindow *window, float deltaTime) {
+	this->fps.push_front(1.0f / deltaTime);
+	while (this->fps.size() > 50)
+		this->fps.pop_back();
 	if (this->snake != nullptr && this->state != GameState::PAUSED)
 		this->snake->tick(window, deltaTime);
 	if (this->apple != nullptr)
@@ -141,6 +146,12 @@ void GameClass::draw(GLFWwindow *window) {
 			camera.pitch
 		);
 		camera.drawText(0.0f, 0.0f, msg, glm::vec3(0, 255, 255));
+		float fpsSum = 0.0f;
+		for (auto x : this->fps) {
+			fpsSum += x;
+		}
+		sprintf(msg, "FPS: %.02f", fpsSum / this->fps.size());
+		camera.drawText(0.0f, this->windowHeight - 20.0f, msg, glm::vec3(0, 255, 255));
 	}
 
 	bool isGame = this->board != nullptr && this->snake != nullptr && this->apple != nullptr;
@@ -169,9 +180,11 @@ void GameClass::draw(GLFWwindow *window) {
 			this->overReason = "Your snake hit a wall.";
 			this->endGame(window, true);
 		} else if (this->apple->hasCollision(headPos, headSize)) {
-			this->points += 1;
+			this->score += 1;
+			if (this->score % 6 == 0)
+				this->level += 1;
 			this->apple->reset(this->board);
-			this->snake->maxLength += this->growth;
+			this->snake->maxLength += this->snake->growFactor;
 		}
 	}
 
@@ -205,7 +218,7 @@ void GameClass::draw(GLFWwindow *window) {
 				true
 			);
 			char msg[128];
-			sprintf(msg, "You got %d points.", this->points);
+			sprintf(msg, "You got %d points.", this->score);
 			camera.drawText(
 				this->windowWidth * 0.5f,
 				this->windowHeight * 0.5f,
@@ -271,7 +284,7 @@ void GameClass::drawMenu(GLFWwindow *window) {
 
 void GameClass::drawScore(GLFWwindow *window) {
 	char msg[128];
-	sprintf(msg, "Score: %d", this->points);
+	sprintf(msg, "Score: %d", this->score);
 	camera.drawText(this->windowWidth * 0.3f, this->windowHeight * 0.05f, msg, glm::vec3(0x23, 0xAA, 0xF2), 2.0f, true);
 	sprintf(msg, "Level: %d", this->level);
 	camera.drawText(this->windowWidth * 0.7f, this->windowHeight * 0.05f, msg, glm::vec3(0x23, 0xAA, 0xF2), 2.0f, true);

@@ -28,6 +28,7 @@ class GameSnake {
 	float maxLength{4.0f};		 // actual body length
 	float updateInterval{0.02f}; // body path spacing
 	float slowdownMax{5.0f};	 // maximum turning slowdown
+	float growFactor{0.5f};
 
   private:
 	float curLength{0.0f};
@@ -42,5 +43,7 @@ class GameSnake {
 	float slowdown{0.0f};
 	float slowdownFactor{0.01f};
 	float slowdownSpeedupFactor{3.0f};
+	float scoreSpeedupFactor{0.05f};
+	float levelSpeedupFactor{0.2f};
 	int slowdownCount{0};
 };

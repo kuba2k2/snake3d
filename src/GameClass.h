@@ -35,10 +35,10 @@ class GameClass {
 	GameBoard *board{nullptr};
 	GameSnake *snake{nullptr};
 	GameApple *apple{nullptr};
-	int points{0};
+	int score{0};
 	int level{1};
-	float growth{1.0f};
 	bool mouseGrab{false};
+	std::list<float> fps;
 	std::string overReason = "The game ended.";
 
   private:

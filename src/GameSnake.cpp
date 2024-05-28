@@ -40,6 +40,10 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 	if (camera.getMode() != CameraMode::FREE_CAM)
 		yawDelta += input.yawMouse;
 
+	float totalSpeedup = 0.0f;
+	totalSpeedup += game.score * this->scoreSpeedupFactor;
+	totalSpeedup += (game.level - 1) * this->levelSpeedupFactor;
+
 	if (yawDelta == 0.0f) {
 		if (this->slowdownCount == 0) {
 			this->slowdown = 0.0f;
@@ -58,7 +62,7 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 			this->slowdownCount += 1;
 		}
 	}
-	this->yaw += yawDelta;
+	this->yaw += yawDelta * (1.0f + totalSpeedup / 4.0f);
 
 	this->updateElapsed += deltaTime;
 	if (this->updateElapsed > this->updateInterval) {
@@ -76,11 +80,7 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 		this->yawPath.emplace_front(this->yaw);
 	}
 
-	if (game.debug && this->path.size() == 15) {
-		game.state = GameState::PAUSED;
-	}
-
-	float curSpeed	   = this->speed - this->slowdown;
+	float curSpeed	   = (this->speed - this->slowdown) * (1.0f + totalSpeedup);
 	glm::vec3 prevHead = this->path.front();
 	glm::vec3 nextHead = prevHead + this->front * curSpeed * deltaTime;
 	this->path.emplace_front(nextHead);
@@ -103,6 +103,15 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	if (this->path.size() < 3)
 		return;
+
+	if (game.debug) {
+		float totalSpeedup = 1.0f;
+		totalSpeedup += game.score * this->scoreSpeedupFactor;
+		totalSpeedup += (game.level - 1) * this->levelSpeedupFactor;
+		char msg[128];
+		sprintf(msg, "speedup=%f", totalSpeedup);
+		camera.drawText(0.0f, 40.0f, msg, glm::vec3(0, 255, 255));
+	}
 
 	glm::mat4 M = glm::mat4(1.0f);
 	for (auto pos : this->path) {
