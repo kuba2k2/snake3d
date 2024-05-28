@@ -3,12 +3,18 @@
 #include <GameBoard.h>
 #include <GameCamera.h>
 #include <GameSnake.h>
+#include <models/ModelCube.h>
 #include <textures.h>
+
+GameClass::GameClass() {
+	this->cube = new ModelCube();
+}
 
 GameClass::~GameClass() {
 	delete this->board;
 	delete this->snake;
 	delete this->apple;
+	delete this->cube;
 }
 
 void GameClass::newGame() {
@@ -133,12 +139,27 @@ void GameClass::draw(GLFWwindow *window) {
 		camera.drawText(0.0f, 0.0f, msg, glm::vec3(0, 255, 255));
 	}
 
-	if (this->board != nullptr)
+	if (this->board != nullptr) {
 		this->board->draw(window, P, V);
-	if (this->snake != nullptr)
+	}
+	if (this->snake != nullptr) {
 		this->snake->draw(window, P, V);
-	if (this->apple != nullptr)
+		if (this->debug) {
+			glm::mat4 M = glm::scale(glm::translate(glm::mat4(1.0f), this->snake->boxPos), this->snake->boxSize);
+			this->cube->draw(window, ShaderProgramType::SP_COLORED, P, V, M);
+			for (auto pos : this->snake->path) {
+				M = glm::scale(glm::translate(glm::mat4(1.0f), pos), this->snake->boxSize);
+				this->cube->draw(window, ShaderProgramType::SP_COLORED, P, V, M);
+			}
+		}
+	}
+	if (this->apple != nullptr) {
 		this->apple->draw(window, P, V);
+		if (this->debug) {
+			glm::mat4 M = glm::scale(glm::translate(glm::mat4(1.0f), this->apple->pos), this->apple->boxSize);
+			this->cube->draw(window, ShaderProgramType::SP_COLORED, P, V, M);
+		}
+	}
 
 	switch (this->state) {
 		case GameState::MENU:
@@ -147,7 +168,7 @@ void GameClass::draw(GLFWwindow *window) {
 		case GameState::PLAYING:
 			break;
 		case GameState::PAUSED:
-			if (camera.getMode() == CameraMode::FREE_CAM)
+			if (camera.getMode() == CameraMode::FREE_CAM || this->debug)
 				break;
 			camera.drawText(
 				this->windowWidth * 0.5f,

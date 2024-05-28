@@ -88,6 +88,7 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 	this->yawPath.emplace_front(this->yaw);
 
 	this->curLength += glm::length(prevHead - nextHead);
+	this->boxPos = this->path.front() + this->front * 1.5f;
 
 	while (this->curLength > this->maxLength) {
 		glm::vec3 prevTail = this->path.back();

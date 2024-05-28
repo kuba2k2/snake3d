@@ -19,6 +19,8 @@ class GameSnake {
   public:
 	std::list<glm::vec3> path;
 	glm::vec3 front;
+	glm::vec3 boxPos;
+	glm::vec3 boxSize{1.0f, 2.0f, 1.0f};
 	float yaw{0.0f};
 	float pitch{0.0f};
 	float speed{10.0f};			 // actual movement speed

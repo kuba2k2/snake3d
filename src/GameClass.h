@@ -14,6 +14,7 @@ enum class GameState {
 
 class GameClass {
   public:
+	GameClass();
 	~GameClass();
 
   public:
@@ -27,6 +28,7 @@ class GameClass {
 
   public:
 	bool debug{false};
+	ModelBase *cube;
 	GameState state{GameState::MENU};
 	GameBoard *board{nullptr};
 	GameSnake *snake{nullptr};
