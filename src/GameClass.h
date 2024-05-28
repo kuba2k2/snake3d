@@ -1,7 +1,7 @@
 #pragma once
 
-#include <GameSnake.h>
 #include <GameBoard.h>
+#include <GameSnake.h>
 #include <libs.h>
 #include <models/ModelApple.h>
 
@@ -33,6 +33,7 @@ class GameClass {
 	GameSnake *snake{nullptr};
 	ModelApple *apple;
 	int points{0};
+	bool mouseGrab{false};
 
   private:
 	float windowWidth{0.0f};

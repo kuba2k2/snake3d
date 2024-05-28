@@ -50,7 +50,6 @@ void initOpenGLProgram(GLFWwindow *window) {
 	glfwSetKeyCallback(window, GameClass::keyCallback);
 	glfwSetScrollCallback(window, GameInput::scrollCallback);
 	glfwSetWindowSizeCallback(window, setViewport);
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	gltInit();
 	initShaders();
 	initTextures();

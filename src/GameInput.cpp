@@ -1,6 +1,7 @@
 #include "GameInput.h"
 
 #include <GameCamera.h>
+#include <GameClass.h>
 
 void GameInput::setViewport(GLFWwindow *window, int width, int height) {
 	input.windowCenterX = width / 2.0f;
@@ -46,6 +47,9 @@ void GameInput::tick(GLFWwindow *window, float deltaTime) {
 		if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS || glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 			this->yawKey += this->keyAngleSensitivity * deltaTime;
 	}
+
+	if (!game.mouseGrab)
+		return;
 
 	double mouseX = 0.0, mouseY = 0.0;
 	if (this->firstMouse) {

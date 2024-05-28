@@ -40,18 +40,19 @@ void GameClass::endGame(bool lost) {
 void GameClass::keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
 	if (action != GLFW_PRESS)
 		return;
-	if (game.state == GameState::MENU) {
-		if (key == GLFW_KEY_ENTER)
-			game.newGame();
-		return;
-	}
 
 	switch (key) {
 		case GLFW_KEY_ENTER:
-			if (game.state == GameState::PLAYING)
-				game.state = GameState::PAUSED;
-			else if (game.state == GameState::PAUSED)
-				game.state = GameState::PLAYING;
+			if (game.state == GameState::MENU) {
+				game.newGame();
+				game.mouseGrab = true;
+			} else if (game.state == GameState::PLAYING) {
+				game.state	   = GameState::PAUSED;
+				game.mouseGrab = false;
+			} else if (game.state == GameState::PAUSED) {
+				game.state	   = GameState::PLAYING;
+				game.mouseGrab = true;
+			}
 			break;
 
 		case GLFW_KEY_F2:
@@ -71,10 +72,17 @@ void GameClass::keyCallback(GLFWwindow *window, int key, int scancode, int actio
 					camera.setMode(CameraMode::STATIC);
 					break;
 			}
+			game.mouseGrab = game.state == GameState::PLAYING;
 			break;
 
 		case GLFW_KEY_Z:
-			camera.setMode(CameraMode::FREE_CAM);
+			if (camera.getMode() == CameraMode::FREE_CAM) {
+				camera.setMode(CameraMode::BIRDS_EYE);
+				game.mouseGrab = game.state == GameState::PLAYING;
+			} else {
+				camera.setMode(CameraMode::FREE_CAM);
+				game.mouseGrab = true;
+			}
 			break;
 
 		case GLFW_KEY_ESCAPE:
@@ -87,6 +95,8 @@ void GameClass::keyCallback(GLFWwindow *window, int key, int scancode, int actio
 		default:
 			break;
 	}
+
+	glfwSetInputMode(window, GLFW_CURSOR, game.mouseGrab ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 }
 
 void GameClass::setViewport(GLFWwindow *window, int width, int height) {
