@@ -139,11 +139,12 @@ void GameClass::draw(GLFWwindow *window) {
 		camera.drawText(0.0f, 0.0f, msg, glm::vec3(0, 255, 255));
 	}
 
-	if (this->board != nullptr) {
+	bool isGame = this->board != nullptr && this->snake != nullptr && this->apple != nullptr;
+
+	if (isGame) {
 		this->board->draw(window, P, V);
-	}
-	if (this->snake != nullptr) {
 		this->snake->draw(window, P, V);
+		this->apple->draw(window, P, V);
 		if (this->debug) {
 			glm::mat4 M = glm::scale(glm::translate(glm::mat4(1.0f), this->snake->boxPos), this->snake->boxSize);
 			this->cube->draw(window, ShaderProgramType::SP_COLORED, P, V, M);
@@ -151,13 +152,19 @@ void GameClass::draw(GLFWwindow *window) {
 				M = glm::scale(glm::translate(glm::mat4(1.0f), pos), this->snake->boxSize);
 				this->cube->draw(window, ShaderProgramType::SP_COLORED, P, V, M);
 			}
-		}
-	}
-	if (this->apple != nullptr) {
-		this->apple->draw(window, P, V);
-		if (this->debug) {
-			glm::mat4 M = glm::scale(glm::translate(glm::mat4(1.0f), this->apple->pos), this->apple->boxSize);
+			M = glm::scale(glm::translate(glm::mat4(1.0f), this->apple->pos), this->apple->boxSize);
 			this->cube->draw(window, ShaderProgramType::SP_COLORED, P, V, M);
+		}
+
+		glm::vec3 headPos  = this->snake->boxPos;
+		glm::vec3 headSize = this->snake->boxSize;
+		if (this->snake->hasCollision(headPos, headSize)) {
+			this->overReason = "Your snake bit itself!";
+			this->endGame(true);
+		} else if (this->apple->hasCollision(headPos, headSize)) {
+			this->points += 1;
+			this->apple->reset(this->board);
+			this->snake->maxLength += this->growth;
 		}
 	}
 
@@ -217,5 +224,7 @@ void GameClass::drawMenu(GLFWwindow *window) {
 		true
 	);
 }
+
+bool GameClass::hasCollision(glm::vec3 pos1, glm::vec3 size1, glm::vec3 pos2, glm::vec3 size2) {}
 
 GameClass game;

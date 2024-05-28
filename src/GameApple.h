@@ -13,6 +13,7 @@ class GameApple {
 	void reset(GameBoard *board);
 	void tick(GLFWwindow *window, float deltaTime);
 	void draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V);
+	bool hasCollision(glm::vec3 pos2, glm::vec3 size2);
 
   public:
 	glm::vec3 pos{0.0f, -0.5f, 0.0f};

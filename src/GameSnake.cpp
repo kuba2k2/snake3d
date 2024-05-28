@@ -130,3 +130,11 @@ void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	MT					= glm::rotate(MT, glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 	this->modelTail->draw(window, ShaderProgramType::SP_TBN, P, V, MT);
 }
+
+bool GameSnake::hasCollision(glm::vec3 pos2, glm::vec3 size2) {
+	for (auto pos : this->path) {
+		if (GameClass::hasCollision(pos, this->boxSize, pos2, size2))
+			return true;
+	}
+	return false;
+}

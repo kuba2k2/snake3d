@@ -40,3 +40,7 @@ void GameApple::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	M			= glm::rotate(M, glm::radians(this->angle), glm::vec3(0.0f, 1.0f, 0.0f));
 	this->model->draw(window, ShaderProgramType::SP_LAMBERT_TEXTURED, P, V, M);
 }
+
+bool GameApple::hasCollision(glm::vec3 pos2, glm::vec3 size2) {
+	return GameClass::hasCollision(this->pos, this->boxSize, pos2, size2);
+}
