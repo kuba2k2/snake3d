@@ -3,10 +3,7 @@
 #include <GameBoard.h>
 #include <GameCamera.h>
 #include <GameSnake.h>
-
-GameClass::GameClass() {
-	this->apple = new ModelApple();
-}
+#include <textures.h>
 
 GameClass::~GameClass() {
 	delete this->board;
@@ -17,8 +14,11 @@ GameClass::~GameClass() {
 void GameClass::newGame() {
 	delete this->board;
 	delete this->snake;
+	delete this->apple;
 	this->board = new GameBoard();
 	this->snake = new GameSnake();
+	this->apple = new GameApple();
+	this->apple->reset(this->board);
 	this->state = GameState::PLAYING;
 	camera.setViewport(nullptr, this->windowWidth, this->windowHeight);
 	camera.reset();
@@ -29,8 +29,10 @@ void GameClass::newGame() {
 void GameClass::endGame(bool lost) {
 	delete this->snake;
 	delete this->board;
+	delete this->apple;
 	this->snake = nullptr;
 	this->board = nullptr;
+	this->apple = nullptr;
 	if (lost)
 		this->state = GameState::OVER;
 	else
@@ -121,7 +123,7 @@ void GameClass::draw(GLFWwindow *window) {
 		char msg[128];
 		sprintf(
 			msg,
-			"camera=(%f, %f, %f), yaw=%f*, pitch=%f*",
+			"camera=(%f, %f, %f), yaw=%f, pitch=%f",
 			camera.pos.x,
 			camera.pos.y,
 			camera.pos.z,
@@ -135,6 +137,8 @@ void GameClass::draw(GLFWwindow *window) {
 		this->board->draw(window, P, V);
 	if (this->snake != nullptr)
 		this->snake->draw(window, P, V);
+	if (this->apple != nullptr)
+		this->apple->draw(window, P, V);
 
 	switch (this->state) {
 		case GameState::MENU:

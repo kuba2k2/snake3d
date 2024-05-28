@@ -12,4 +12,5 @@ ModelApple::ModelApple() {
 	this->normals = myappleNormals;
 	//	this->vertexNormals = myappleVertexNormals;
 	this->texCoords = myappleTexCoords;
+	this->scale		= 15.0f;
 }

@@ -17,6 +17,8 @@ extern GLuint texSnakeSkin;
 extern GLuint texSnakeSkinNormal;
 extern GLuint texSnake;
 extern GLuint texSnakeNormal;
+extern GLuint texApple;
+extern GLuint texAppleNormal;
 
 void initTextures();
 void freeTextures();

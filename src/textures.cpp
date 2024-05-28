@@ -15,6 +15,8 @@ GLuint texSnakeSkin;
 GLuint texSnakeSkinNormal;
 GLuint texSnake;
 GLuint texSnakeNormal;
+GLuint texApple;
+GLuint texAppleNormal;
 
 static GLuint readTexture(const char *filename) {
 	GLuint tex;
@@ -54,6 +56,8 @@ void initTextures() {
 	texSnakeSkinNormal = readTexture("textures/skinNormal.png");
 	texSnake		   = readTexture("textures/snake.png");
 	texSnakeNormal	   = readTexture("textures/snakeNormal.png");
+	texApple		   = readTexture("textures/apple1.png");
+	texAppleNormal	   = readTexture("textures/appleNormal.png");
 	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
@@ -73,4 +77,6 @@ void freeTextures() {
 	glDeleteTextures(1, &texSnakeSkinNormal);
 	glDeleteTextures(1, &texSnake);
 	glDeleteTextures(1, &texSnakeNormal);
+	glDeleteTextures(1, &texApple);
+	glDeleteTextures(1, &texAppleNormal);
 }

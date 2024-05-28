@@ -1,9 +1,9 @@
 #pragma once
 
+#include <GameApple.h>
 #include <GameBoard.h>
 #include <GameSnake.h>
 #include <libs.h>
-#include <models/ModelApple.h>
 
 enum class GameState {
 	MENU,
@@ -14,7 +14,6 @@ enum class GameState {
 
 class GameClass {
   public:
-	GameClass();
 	~GameClass();
 
   public:
@@ -31,7 +30,7 @@ class GameClass {
 	GameState state{GameState::MENU};
 	GameBoard *board{nullptr};
 	GameSnake *snake{nullptr};
-	ModelApple *apple;
+	GameApple *apple{nullptr};
 	int points{0};
 	bool mouseGrab{false};
 

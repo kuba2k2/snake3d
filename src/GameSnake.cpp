@@ -13,6 +13,12 @@ GameSnake::GameSnake() {
 	this->modelBody = new ModelSnakeBodySphere();
 	this->modelHead = new ModelSnakeHead();
 	this->modelTail = new ModelSnakeTail();
+
+	this->modelHead->tex	   = texSnakeHeadColor;
+	this->modelBody->tex	   = texSnakeHead;
+	this->modelBody->texNormal = texSnakeHeadNormal;
+	this->modelTail->tex	   = texSnakeHead;
+	this->modelTail->texNormal = texSnakeHeadNormal;
 }
 
 GameSnake::~GameSnake() {
@@ -96,12 +102,6 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	if (this->path.size() < 3)
 		return;
-
-	this->modelHead->tex	   = texSnakeHeadColor;
-	this->modelBody->tex	   = texSnakeHead;
-	this->modelBody->texNormal = texSnakeHeadNormal;
-	this->modelTail->tex	   = texSnakeHead;
-	this->modelTail->texNormal = texSnakeHeadNormal;
 
 	glm::mat4 M = glm::mat4(1.0f);
 	for (auto pos : this->path) {
