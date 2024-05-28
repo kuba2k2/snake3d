@@ -19,6 +19,8 @@ class GameSnake {
   public:
 	std::list<glm::vec3> path;
 	glm::vec3 front;
+	float yaw{0.0f};
+	float pitch{0.0f};
 	float speed{10.0f};			 // actual movement speed
 	float maxLength{4.0f};		 // actual body length
 	float updateInterval{0.02f}; // body path spacing
@@ -26,8 +28,6 @@ class GameSnake {
 
   private:
 	float curLength{0.0f};
-	float yaw{0.0f};
-	float pitch{0.0f};
 	ModelBase *modelBody;
 	ModelBase *modelHead;
 	ModelBase *modelTail;

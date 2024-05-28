@@ -94,11 +94,6 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 }
 
 void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
-
-	char msg[64];
-	sprintf(msg, "speed=%f   curLength=%f", this->speed - this->slowdown, this->curLength);
-	camera.drawText(0.0f, 0.0f, msg, glm::vec3(0.0f, 1.0f, 1.0f));
-
 	if (this->path.size() < 3)
 		return;
 

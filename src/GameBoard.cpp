@@ -1,9 +1,9 @@
 #include "GameBoard.h"
 
-#include <textures.h>
-
+#include <GameCamera.h>
 #include <models/ModelCube.h>
 #include <models/ModelFloor.h>
+#include <textures.h>
 
 GameBoard::GameBoard() {
 	this->modelSolid = new ModelCube();
@@ -47,11 +47,13 @@ void GameBoard::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	M = glm::scale(M, glm::vec3(this->wall, this->height, this->width));
 	this->modelSolid->draw(window, ShaderProgramType::SP_LAMBERT, P, V, M);
 
-	this->modelFloor->tex		= planks;
-	this->modelFloor->texNormal = planksNormal1;
-	this->modelFloor->texSpec	= planksSpec;
-	this->modelWall->tex		= texBricks2;
-	this->modelWall->texNormal	= texBricks2Normal;
+	this->modelFloor->tex		  = planks;
+	this->modelFloor->texNormal	  = planksNormal1;
+	this->modelFloor->texSpec	  = planksSpec;
+	this->modelFloor->light		  = camera.staticPos;
+	this->modelFloor->lightCustom = true;
+	this->modelWall->tex		  = texBricks2;
+	this->modelWall->texNormal	  = texBricks2Normal;
 
 	float magic		= 0.05f;
 	float thickness = 10.0f;

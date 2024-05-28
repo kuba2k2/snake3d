@@ -25,12 +25,14 @@ void GameClass::keyCallback(GLFWwindow *window, int key, int scancode, int actio
 					camera.setMode(CameraMode::BIRDS_EYE);
 					break;
 				case CameraMode::BIRDS_EYE:
-					camera.setMode(CameraMode::FREE_CAM);
-					break;
 				case CameraMode::FREE_CAM:
 					camera.setMode(CameraMode::STATIC);
 					break;
 			}
+			break;
+
+		case GLFW_KEY_Z:
+			camera.setMode(CameraMode::FREE_CAM);
 			break;
 
 		default:
@@ -54,6 +56,18 @@ void GameClass::draw(GLFWwindow *window) {
 
 	glm::mat4 V = glm::lookAt(camera.pos, camera.pos + camera.front, camera.up);
 	glm::mat4 P = glm::perspective(50.0f * glm::pi<float>() / 180.0f, camera.aspectRatio, 0.01f, 100.0f);
+
+	char msg[128];
+	sprintf(
+		msg,
+		"camera=(%f, %f, %f), yaw=%f*, pitch=%f*",
+		camera.pos.x,
+		camera.pos.y,
+		camera.pos.z,
+		camera.yaw,
+		camera.pitch
+	);
+	camera.drawText(0.0f, 0.0f, msg, glm::vec3(0.0f, 1.0f, 1.0f));
 
 	board.draw(window, P, V);
 	snake.draw(window, P, V);

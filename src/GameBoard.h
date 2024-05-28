@@ -14,7 +14,7 @@ class GameBoard {
 
   public:
 	float length{50.0f};
-	float width{25.0f};
+	float width{30.0f};
 	float height{5.0f};
 	float wall{0.2f};
 	float floor{1.0f};

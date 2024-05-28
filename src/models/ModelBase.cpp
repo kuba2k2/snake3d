@@ -33,6 +33,10 @@ void ModelBase::draw(GLFWwindow *window, ShaderProgramType shader, glm::mat4 P, 
 	glUniformMatrix4fv(sp->u("V"), 1, false, glm::value_ptr(V));
 	glUniformMatrix4fv(sp->u("M"), 1, false, glm::value_ptr(M));
 
+	if (!this->lightCustom) {
+		this->light = camera.pos;
+	}
+
 	switch (shader) {
 		case ShaderProgramType::SP_COLORED:
 			glEnableVertexAttribArray(sp->a("vertex"));
@@ -68,7 +72,7 @@ void ModelBase::draw(GLFWwindow *window, ShaderProgramType shader, glm::mat4 P, 
 			glVertexAttribPointer(sp->a("c3"), 4, GL_FLOAT, false, 0, this->c3);
 			glEnableVertexAttribArray(sp->a("texCoord0"));
 			glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, this->texCoords);
-			glUniform3f(sp->u("cameraPos"), camera.pos.x, camera.pos.y, camera.pos.z);
+			glUniform3f(sp->u("cameraPos"), this->light.x, this->light.y, this->light.z);
 			glUniform2f(sp->u("texRepeat"), this->texRepeat.x, this->texRepeat.y);
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, this->tex);
@@ -78,7 +82,7 @@ void ModelBase::draw(GLFWwindow *window, ShaderProgramType shader, glm::mat4 P, 
 			glUniform1i(sp->u("textureMap1"), 1);
 			break;
 		case ShaderProgramType::SP_PHONG:
-			glUniform4f(sp->u("lp"), camera.pos.x, camera.pos.y, camera.pos.z, 1.0f);
+			glUniform4f(sp->u("lp"), this->light.x, this->light.y, this->light.z, 1.0f);
 			glEnableVertexAttribArray(sp->a("vertex"));
 			glVertexAttribPointer(sp->a("vertex"), 4, GL_FLOAT, false, 0, this->vertices);
 			glEnableVertexAttribArray(sp->a("color"));
@@ -95,7 +99,7 @@ void ModelBase::draw(GLFWwindow *window, ShaderProgramType shader, glm::mat4 P, 
 			glVertexAttribPointer(sp->a("normal"), 4, GL_FLOAT, false, 0, this->normals);
 			glEnableVertexAttribArray(sp->a("texCoord0"));
 			glVertexAttribPointer(sp->a("texCoord0"), 2, GL_FLOAT, false, 0, this->texCoords);
-			glUniform3f(sp->u("cameraPos"), camera.pos.x, camera.pos.y, camera.pos.z);
+			glUniform3f(sp->u("cameraPos"), this->light.x, this->light.y, this->light.z);
 			glUniform2f(sp->u("texRepeat"), this->texRepeat.x, this->texRepeat.y);
 			glActiveTexture(GL_TEXTURE0);
 			glBindTexture(GL_TEXTURE_2D, this->tex);

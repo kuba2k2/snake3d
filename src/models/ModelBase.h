@@ -34,4 +34,6 @@ class ModelBase {
 	GLuint texNormal;
 	GLuint texSpec;
 	glm::vec2 texRepeat{1.0f, 1.0f};
+	glm::vec3 light{0.0f, 0.0f, 0.0f};
+	bool lightCustom = false;
 };

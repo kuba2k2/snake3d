@@ -28,13 +28,14 @@ class GameCamera {
 	glm::vec3 pos{0.0f, 15.0f, 3.0f};
 	glm::vec3 front;
 	glm::vec3 up{0.0f, 1.0f, 0.0f};
-	float aspectRatio{1.0f};
-
-  private:
 	float yaw{-90.0f};
 	float pitch{-75.0f};
+	float aspectRatio{1.0f};
+	glm::vec3 staticPos{0.0f, 30.0f, 0.0f};
+
+  private:
 	glm::vec3 walkFront;
-	CameraMode mode{CameraMode::FREE_CAM};
+	CameraMode mode{CameraMode::BIRDS_EYE};
 };
 
 extern GameCamera camera;

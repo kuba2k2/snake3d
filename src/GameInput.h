@@ -8,7 +8,7 @@ class GameInput {
 	void tick(GLFWwindow *window, float deltaTime);
 
   public:
-	float keyWalkSensitivity{5.0f};
+	float keyWalkSensitivity{15.0f};
 	float keyAngleSensitivity{120.0f};
 	float mouseSensitivity{0.1f};
 	float mouseMaxAngle{270.0f};
