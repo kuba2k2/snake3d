@@ -5,6 +5,7 @@
 class GameInput {
   public:
 	void setViewport(GLFWwindow *window, int width, int height);
+	static void scrollCallback(GLFWwindow* window, double xoffset, double yoffset);
 	void tick(GLFWwindow *window, float deltaTime);
 
   public:

@@ -48,6 +48,7 @@ void initOpenGLProgram(GLFWwindow *window) {
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
 	glfwSetKeyCallback(window, GameClass::keyCallback);
+	glfwSetScrollCallback(window, GameInput::scrollCallback);
 	glfwSetWindowSizeCallback(window, setViewport);
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 	gltInit();

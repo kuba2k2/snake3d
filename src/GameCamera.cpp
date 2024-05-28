@@ -67,7 +67,7 @@ void GameCamera::update(GLFWwindow *window) {
 			direction.x	   = cos(glm::radians(game.snake->yaw)) * cos(glm::radians(this->pitch));
 			direction.y	   = sin(glm::radians(this->pitch));
 			direction.z	   = sin(glm::radians(game.snake->yaw)) * cos(glm::radians(this->pitch));
-			glm::vec3 back = center - glm::normalize(direction) * 20.0f;
+			glm::vec3 back = center - glm::normalize(direction) * this->birdsEyeDistance;
 			this->pos	   = back;
 			this->front	   = center - this->pos;
 			break;

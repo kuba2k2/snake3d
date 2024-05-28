@@ -7,6 +7,14 @@ void GameInput::setViewport(GLFWwindow *window, int width, int height) {
 	input.windowCenterY = height / 2.0f;
 }
 
+void GameInput::scrollCallback(GLFWwindow *window, double xoffset, double yoffset) {
+	camera.birdsEyeDistance -= yoffset;
+	if (camera.birdsEyeDistance > 30.0f)
+		camera.birdsEyeDistance = 30.0f;
+	if (camera.birdsEyeDistance < 8.0f)
+		camera.birdsEyeDistance = 8.0f;
+}
+
 void GameInput::tick(GLFWwindow *window, float deltaTime) {
 	this->yawKey   = 0.0;
 	this->yawMouse = 0.0;
