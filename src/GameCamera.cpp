@@ -1,8 +1,7 @@
 #include "GameCamera.h"
 
-#include <GameBoard.h>
+#include <GameClass.h>
 #include <GameInput.h>
-#include <GameSnake.h>
 
 GameCamera::GameCamera() {
 	this->updateFront();
@@ -29,7 +28,14 @@ void GameCamera::updateFront() {
 
 void GameCamera::setViewport(GLFWwindow *window, int width, int height) {
 	this->aspectRatio = (float)width / (float)height;
-	this->staticPos	  = glm::vec3(0.0f, 35.0f, board.width / 3.0f);
+	if (!game.board)
+		return;
+	this->staticPos = glm::vec3(0.0f, 35.0f, game.board->width / 3.0f);
+}
+
+void GameCamera::reset() {
+	this->yaw	= -90.0f;
+	this->pitch = -75.0f;
 }
 
 void GameCamera::update(GLFWwindow *window) {
@@ -42,25 +48,25 @@ void GameCamera::update(GLFWwindow *window) {
 			break;
 		}
 		case CameraMode::FIRST_PERSON: {
-			if (snake.path.empty())
+			if (!game.snake || game.snake->path.empty())
 				return;
-			this->pos	= snake.path.front() + snake.front * 2.0f;
-			this->front = snake.front;
+			this->pos	= game.snake->path.front() + game.snake->front * 2.0f;
+			this->front = game.snake->front;
 			break;
 		}
 		case CameraMode::BIRDS_EYE: {
-			if (snake.path.empty())
+			if (!game.snake || game.snake->path.empty())
 				return;
 			this->pitch += input.pitch;
 			if (this->pitch < -89.0f)
 				this->pitch = -89.0f;
 			if (this->pitch > -30.0f)
 				this->pitch = -30.0f;
-			glm::vec3 center = snake.path.front() + snake.front * 2.0f;
+			glm::vec3 center = game.snake->path.front() + game.snake->front * 2.0f;
 			glm::vec3 direction;
-			direction.x	   = cos(glm::radians(snake.yaw)) * cos(glm::radians(this->pitch));
+			direction.x	   = cos(glm::radians(game.snake->yaw)) * cos(glm::radians(this->pitch));
 			direction.y	   = sin(glm::radians(this->pitch));
-			direction.z	   = sin(glm::radians(snake.yaw)) * cos(glm::radians(this->pitch));
+			direction.z	   = sin(glm::radians(game.snake->yaw)) * cos(glm::radians(this->pitch));
 			glm::vec3 back = center - glm::normalize(direction) * 20.0f;
 			this->pos	   = back;
 			this->front	   = center - this->pos;
@@ -83,7 +89,7 @@ void GameCamera::drawText(float x, float y, const std::string &text, glm::vec3 c
 	GLTtext *glt = gltCreateText();
 	gltSetText(glt, text.c_str());
 	gltBeginDraw();
-	gltColor(color.r, color.g, color.b, 1.0f);
+	gltColor(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, 1.0f);
 	if (center) {
 		gltDrawText2DAligned(glt, x, y, size, GLT_CENTER, GLT_CENTER);
 	} else {

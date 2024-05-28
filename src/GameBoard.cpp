@@ -165,5 +165,3 @@ void GameBoard::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	);
 	this->modelWall->draw(window, ShaderProgramType::SP_TBN, P, V, M);
 }
-
-GameBoard board;

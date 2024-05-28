@@ -24,5 +24,3 @@ class GameBoard {
 	ModelBase *modelFloor;
 	ModelBase *modelWall;
 };
-
-extern GameBoard board;

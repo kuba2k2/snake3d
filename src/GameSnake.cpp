@@ -70,7 +70,7 @@ void GameSnake::tick(GLFWwindow *window, float deltaTime) {
 		this->yawPath.emplace_front(this->yaw);
 	}
 
-	if (this->path.size() == 15) {
+	if (game.debug && this->path.size() == 15) {
 		game.state = GameState::PAUSED;
 	}
 
@@ -127,5 +127,3 @@ void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	MT					= glm::rotate(MT, glm::radians(90.0f), glm::vec3(0.0f, -1.0f, 0.0f));
 	this->modelTail->draw(window, ShaderProgramType::SP_LAMBERT_TEXTURED, P, V, MT);
 }
-
-GameSnake snake;

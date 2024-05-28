@@ -19,6 +19,7 @@ class GameCamera {
 
   public:
 	void setViewport(GLFWwindow *window, int width, int height);
+	void reset();
 	void update(GLFWwindow *window);
 	void drawText(float x, float y, const std::string &text, glm::vec3 color, float size = 1.0f, bool center = false);
 	CameraMode getMode();

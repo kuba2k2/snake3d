@@ -41,5 +41,3 @@ class GameSnake {
 	float slowdownSpeedupFactor{3.0f};
 	int slowdownCount{0};
 };
-
-extern GameSnake snake;
