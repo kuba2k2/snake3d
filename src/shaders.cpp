@@ -7,6 +7,7 @@ ShaderProgram *spTextured;
 ShaderProgram *spLambertTextured;
 ShaderProgram *spTbn;
 ShaderProgram *spPhong;
+ShaderProgram *spSpec;
 
 void initShaders() {
 	spLambert		  = new ShaderProgram("shaders/v_lambert.glsl", NULL, "shaders/f_lambert.glsl");
@@ -16,6 +17,7 @@ void initShaders() {
 	spLambertTextured = new ShaderProgram("shaders/v_lamberttextured.glsl", NULL, "shaders/f_lamberttextured.glsl");
 	spTbn			  = new ShaderProgram("shaders/v_tbn.glsl", NULL, "shaders/f_tbn.glsl");
 	spPhong			  = new ShaderProgram("shaders/v_phong.glsl", NULL, "shaders/f_phong.glsl");
+	spSpec			  = new ShaderProgram("shaders/v_spec.glsl", NULL, "shaders/f_spec.glsl");
 }
 
 void freeShaders() {
@@ -26,4 +28,5 @@ void freeShaders() {
 	delete spLambertTextured;
 	delete spTbn;
 	delete spPhong;
+	delete spSpec;
 }

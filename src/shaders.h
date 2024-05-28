@@ -9,6 +9,7 @@ extern ShaderProgram *spColored;
 extern ShaderProgram *spLambertTextured;
 extern ShaderProgram *spTbn;
 extern ShaderProgram *spPhong;
+extern ShaderProgram *spSpec;
 
 void initShaders();
 void freeShaders();

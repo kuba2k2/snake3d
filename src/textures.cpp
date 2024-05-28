@@ -40,7 +40,7 @@ void initTextures() {
 	planksNormal2	 = readTexture("textures/planksNormalDetail.png");
 	planksNormal3	 = readTexture("textures/planksNormal2.png");
 	planksSpec		 = readTexture("textures/planksSpec.png");
-	//	glGenerateMipmap(GL_TEXTURE_2D);
+	glGenerateMipmap(GL_TEXTURE_2D);
 }
 
 void freeTextures() {

@@ -49,6 +49,7 @@ void GameBoard::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 
 	this->modelFloor->tex		= planks;
 	this->modelFloor->texNormal = planksNormal1;
+	this->modelFloor->texSpec	= planksSpec;
 	this->modelWall->tex		= texBricks2;
 	this->modelWall->texNormal	= texBricks2Normal;
 
@@ -62,7 +63,7 @@ void GameBoard::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	M							= glm::translate(M, glm::vec3(0.0f, 0.0f, thickness / 2.0f - this->floor / 2.0f));
 	M							= glm::scale(M, glm::vec3(this->length, this->width, thickness));
 	this->modelFloor->texRepeat = glm::vec2(this->length / 20.0f, this->width / 20.0f);
-	this->modelFloor->draw(window, ShaderProgramType::SP_TBN, P, V, M);
+	this->modelFloor->draw(window, ShaderProgramType::SP_SPEC, P, V, M);
 
 	this->modelWall->texRepeat = glm::vec2(this->length / 5.0f, (this->height + this->floor / 2.0f) / 5.0f);
 
