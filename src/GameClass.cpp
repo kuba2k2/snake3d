@@ -46,7 +46,7 @@ void GameClass::endGame(GLFWwindow *window, bool lost) {
 	else
 		this->state = GameState::MENU;
 	this->mouseGrab = false;
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 void GameClass::keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
@@ -275,7 +275,9 @@ void GameClass::drawScore(GLFWwindow *window) {
 }
 
 bool GameClass::hasCollision(glm::vec3 pos1, glm::vec3 size1, glm::vec3 pos2, glm::vec3 size2) {
-	return false;
+	bool collisionX = pos1.x + size1.x >= pos2.x && pos2.x + size2.x >= pos1.x;
+	bool collisionZ = pos1.z + size1.z >= pos2.z && pos2.z + size2.z >= pos1.z;
+	return collisionX && collisionZ;
 }
 
 GameClass game;
