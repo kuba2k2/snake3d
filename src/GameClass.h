@@ -37,7 +37,7 @@ class GameClass {
 	GameApple *apple{nullptr};
 	int points{0};
 	int level{1};
-	float growth{0.5f};
+	float growth{1.0f};
 	bool mouseGrab{false};
 	std::string overReason = "The game ended.";
 

@@ -40,7 +40,7 @@ class GameSnake {
   private:
 	float updateElapsed{0.0f};
 	float slowdown{0.0f};
-	float slowdownFactor{0.05f};
+	float slowdownFactor{0.01f};
 	float slowdownSpeedupFactor{3.0f};
 	int slowdownCount{0};
 };

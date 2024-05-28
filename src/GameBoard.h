@@ -11,6 +11,7 @@ class GameBoard {
 
   public:
 	void draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V);
+	bool hasCollision(glm::vec3 pos2, glm::vec3 size2);
 
   public:
 	float length{50.0f};

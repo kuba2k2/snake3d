@@ -1,6 +1,7 @@
 #include "GameBoard.h"
 
 #include <GameCamera.h>
+#include <GameClass.h>
 #include <models/ModelCube.h>
 #include <models/ModelFloor.h>
 #include <textures.h>
@@ -164,4 +165,12 @@ void GameBoard::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 		glm::vec3(this->width - this->wall * 2.0f - magic * 2.0f, this->height + this->floor / 2.0f, thickness)
 	);
 	this->modelWall->draw(window, ShaderProgramType::SP_TBN, P, V, M);
+}
+
+bool GameBoard::hasCollision(glm::vec3 pos2, glm::vec3 size2) {
+	float sizeX		= this->length - 1.0f;
+	float sizeZ		= this->width - 1.0f;
+	glm::vec3 pos1	= glm::vec3(-sizeX / 2.0f, 0.0f, -sizeZ / 2.0f);
+	glm::vec3 size1 = glm::vec3(sizeX, this->height, sizeZ);
+	return !GameClass::hasCollision(pos1, size1, pos2, size2);
 }

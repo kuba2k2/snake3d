@@ -145,7 +145,7 @@ void GameClass::draw(GLFWwindow *window) {
 
 	bool isGame = this->board != nullptr && this->snake != nullptr && this->apple != nullptr;
 
-	if (isGame) {
+	if (isGame && !this->snake->path.empty()) {
 		this->board->draw(window, P, V);
 		this->snake->draw(window, P, V);
 		this->apple->draw(window, P, V);
@@ -164,6 +164,9 @@ void GameClass::draw(GLFWwindow *window) {
 		glm::vec3 headSize = this->snake->boxSize;
 		if (this->snake->hasCollision(headPos, headSize)) {
 			this->overReason = "Your snake bit itself.";
+			this->endGame(window, true);
+		} else if (this->board->hasCollision(headPos, headSize)) {
+			this->overReason = "Your snake hit a wall.";
 			this->endGame(window, true);
 		} else if (this->apple->hasCollision(headPos, headSize)) {
 			this->points += 1;
@@ -251,7 +254,7 @@ void GameClass::drawMenu(GLFWwindow *window) {
 		"2. Eat the apples.\n"
 		"3. Don't hit the wall, don't bite yourself.\n"
 		"4. Press F5 to change camera view.\n"
-		"5. Press Esc to end the game.",
+		"5. Press Esc to end, Enter to pause.",
 		glm::vec3(0x4C, 0x5E, 0xF7),
 		2.0f,
 		true
