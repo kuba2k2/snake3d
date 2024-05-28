@@ -98,7 +98,7 @@ void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 		return;
 
 	this->modelBody->tex = texSnake;
-	this->modelHead->tex = texSnakeHead;
+	this->modelHead->tex = texSnakeHeadColor;
 	this->modelTail->tex = texSnakeSkin;
 
 	glm::mat4 M = glm::mat4(1.0f);

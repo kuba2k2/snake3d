@@ -47,7 +47,7 @@ void initTextures() {
 	planksNormal2	   = readTexture("textures/planksNormalDetail.png");
 	planksNormal3	   = readTexture("textures/planksNormal2.png");
 	planksSpec		   = readTexture("textures/planksSpec.png");
-	texSnakeHeadColor  = readTexture("textures/LP_skin_BaseColor.png");
+	texSnakeHeadColor  = readTexture("textures/snakeheadnew.png");
 	texSnakeHead	   = readTexture("textures/head.png");
 	texSnakeHeadNormal = readTexture("textures/headNormal.png");
 	texSnakeSkin	   = readTexture("textures/skin.png");
