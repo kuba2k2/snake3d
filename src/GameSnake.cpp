@@ -127,7 +127,7 @@ void GameSnake::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	MH			 = glm::rotate(MH, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 	MH			 = glm::rotate(MH, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
 	MH			 = glm::rotate(MH, glm::radians(15.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-	this->modelHead->draw(window, ShaderProgramType::SP_LAMBERT_TEXTURED, P, V, MH);
+	this->modelHead->draw(window, ShaderProgramType::SP_PHONG, P, V, MH);
 
 	glm::vec3 tailFront = this->frontPath.back();
 	float tailYaw		= this->yawPath.back();

@@ -38,7 +38,7 @@ void GameApple::draw(GLFWwindow *window, glm::mat4 P, glm::mat4 V) {
 	glm::mat4 M = glm::mat4(1.0f);
 	M			= glm::translate(M, this->pos);
 	M			= glm::rotate(M, glm::radians(this->angle), glm::vec3(0.0f, 1.0f, 0.0f));
-	this->model->draw(window, ShaderProgramType::SP_LAMBERT_TEXTURED, P, V, M);
+	this->model->draw(window, ShaderProgramType::SP_PHONG, P, V, M);
 }
 
 bool GameApple::hasCollision(glm::vec3 pos2, glm::vec3 size2) {
