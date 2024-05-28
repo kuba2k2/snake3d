@@ -1,8 +1,6 @@
 #include "ModelSnakeBodySphere.h"
 
-#include <modeldata/myball.h>
 #include <modeldata/mykolo.h>
-#include <modeldata/mysphere.h>
 
 ModelSnakeBodySphere::ModelSnakeBodySphere() {
 	/*this->vertexCount = myballVertexCount;
